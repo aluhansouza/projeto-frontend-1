@@ -1,7 +1,13 @@
 <!-- TOPO DA TABELA -->
 <p-toolbar styleClass="mb-6">
   <ng-template #start>
-    <p-button label="Novo Material" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="novoMaterial()" />
+    <p-button 
+      label="Novo Material" 
+      icon="pi pi-plus" 
+      severity="secondary" 
+      class="mr-2" 
+      (onClick)="novoMaterial()" 
+    />
     <p-button 
       label="Excluir" 
       icon="pi pi-trash" 
@@ -13,7 +19,12 @@
   </ng-template>
 
   <ng-template #end>
-    <p-button label="Exportar para CSV" icon="pi pi-upload" severity="secondary" (onClick)="exportCSV()" />
+    <p-button 
+      label="Exportar para CSV" 
+      icon="pi pi-upload" 
+      severity="secondary" 
+      (onClick)="exportCSV()" 
+    />
   </ng-template>
 </p-toolbar>
 
@@ -42,7 +53,12 @@
       <h5 class="m-0">Gerenciar Materiais</h5>
       <p-iconfield>
         <p-inputicon styleClass="pi pi-search"></p-inputicon>
-        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Pesquisar..." />
+        <input 
+          pInputText 
+          type="text" 
+          (input)="onGlobalFilter(dt, $event)" 
+          placeholder="Pesquisar..." 
+        />
       </p-iconfield>
     </div>
   </ng-template>
@@ -59,51 +75,166 @@
       <th pSortableColumn="categoria.nome">Categoria <p-sortIcon field="categoria.nome" /></th>
       <th pSortableColumn="origem.nome">Origem <p-sortIcon field="origem.nome" /></th>
       <th pSortableColumn="qrValor">QR Code <p-sortIcon field="qrValor" /></th>
-      
       <th>Ações</th>
     </tr>
   </ng-template>
 
   <ng-template #body let-material>
-    <tr>
-      <td><p-tableCheckbox [value]="material" /></td>
-      <td>{{ material.id }}</td>
-      <td>{{ material.nome }}</td>
-      <td><a [href]="material.imagemUrl" target="_blank">{{ material.imagemUrl }}</a></td>
-      <td>
-  <p-tag 
-    [value]="material.situacao" 
-    [severity]="situacaoToSeverity(material.situacao)" />
-      </td>
-      <td>{{ material.patrimonio }}</td>
-      <td>{{ material.setor?.nome || 'Setor não definido' }}</td>
-      <td>{{ material.categoria?.nome || 'Categoria não definida' }}</td>
-      <td>{{ material.origem?.nome || 'Origem não definida' }}</td>
-      <td>
-  <div [id]="'qr-' + material.id" style="width: 60px; height: 60px;"></div>
-</td>
-
-      <td>
-        <p-button 
-          icon="pi pi-pencil" 
-          class="mr-2" 
-          (click)="editarMaterial(material)" 
-          [rounded]="true" 
-          [outlined]="true" 
-          severity="secondary" 
-        />
-        <p-button 
-          icon="pi pi-trash" 
-          (click)="deletarMaterial(material.id!)" 
-          [rounded]="true" 
-          [outlined]="true" 
-          severity="danger" 
-        />
-      </td>
-    </tr>
+    <tr (click)="abrirVisualizarMaterial(material)" style="cursor: pointer;">
+  <td><p-tableCheckbox [value]="material" (click)="$event.stopPropagation()"/></td>
+  <td>{{ material.id }}</td>
+  <td>{{ material.nome }}</td>
+  <td>
+    <a [href]="material.imagemUrl" target="_blank" (click)="$event.stopPropagation()">{{ material.imagemUrl }}</a>
+  </td>
+  <td>
+    <p-tag 
+      [value]="material.situacao" 
+      [severity]="situacaoToSeverity(material.situacao)" 
+    />
+  </td>
+  <td>{{ material.patrimonio }}</td>
+  <td>{{ material.setor?.nome || 'Setor não definido' }}</td>
+  <td>{{ material.categoria?.nome || 'Categoria não definida' }}</td>
+  <td>{{ material.origem?.nome || 'Origem não definida' }}</td>
+  <td>
+    <div 
+      [id]="'qr-' + material.id" 
+      style="width: 60px; height: 60px;"
+      (click)="$event.stopPropagation()"
+    ></div>
+  </td>
+  <td>
+    <p-button 
+      icon="pi pi-pencil" 
+      class="mr-2" 
+      (click)="editarMaterial(material); $event.stopPropagation()" 
+      [rounded]="true" 
+      [outlined]="true" 
+      severity="secondary" 
+    />
+    <p-button 
+      icon="pi pi-trash" 
+      (click)="deletarMaterial(material.id!); $event.stopPropagation()" 
+      [rounded]="true" 
+      [outlined]="true" 
+      severity="danger" 
+    />
+  </td>
+</tr>
   </ng-template>
-  
+
 </p-table>
+
+<p-dialog 
+  header="Visualizar Material" 
+  [(visible)]="materialVisualizarDialog" 
+  [modal]="true" 
+  [style]="{ width: '900px', height: 'auto' }" 
+  [closeOnEscape]="true" 
+  (onHide)="materialVisualizarDialog = false"
+  [dismissableMask]="true"
+>
+  <div class="flex flex-col gap-6">
+    <div class="campo-duplo">
+      <!-- Nome (readonly) -->
+      <div class="campo">
+        <label>Nome</label>
+        <input type="text" pInputText [value]="material.nome" readonly class="w-full" />
+      </div>
+
+      <!-- Patrimônio (readonly) -->
+      <div class="campo">
+        <label>Patrimônio</label>
+        <input type="text" pInputText [value]="material.patrimonio" readonly class="w-full" />
+      </div>
+    </div>
+
+   <div class="campo">
+  <label>Situação</label>
+  <p-select 
+    [options]="situacoes" 
+    [ngModel]="material.situacao" 
+    optionLabel="label" 
+    optionValue="value"
+    [disabled]="true"
+    class="w-full"
+  >
+  </p-select>
+</div>
+
+
+    <div class="campo-triplo">
+      <!-- Setor (readonly) -->
+      <div class="campo">
+        <label>Setor</label>
+        <input type="text" pInputText [value]="getNomeSetor(material.setorId)" readonly class="w-full" />
+      </div>
+
+      <!-- Categoria (readonly) -->
+      <div class="campo">
+        <label>Categoria</label>
+        <input type="text" pInputText [value]="getNomeCategoria(material.categoriaId)" readonly class="w-full" />
+      </div>
+
+      <!-- Origem (readonly) -->
+      <div class="campo">
+        <label>Origem</label>
+        <input type="text" pInputText [value]="getNomeOrigem(material.origemId)" readonly class="w-full" />
+      </div>
+    </div>
+
+    <div class="campo">
+      <label>Localização Física</label>
+      <input type="text" pInputText [value]="material.localizacaoFisica" readonly class="w-full" />
+    </div>
+
+    <div class="campo">
+      <label>Descrição</label>
+      <textarea pInputTextarea [value]="material.descricao" rows="3" readonly class="w-full"></textarea>
+    </div>
+
+    <div class="campo">
+      <label>Identificação do Recibo</label>
+      <input type="text" pInputText [value]="material.identificacaoRecibo" readonly class="w-full" />
+    </div>
+
+    <div class="campo-triplo">
+      <div class="campo">
+        <label>Tipo de Depreciação</label>
+        <input type="text" pInputText [value]="material.tipoDepreciacao" readonly class="w-full" />
+      </div>
+
+      <div class="campo">
+        <label>Depreciação (%)</label>
+        <input type="text" pInputText [value]="material.percentualDepreciacao" readonly class="w-full" />
+      </div>
+
+      <div class="campo">
+        <label>Valor Compra (R$)</label>
+        <input type="text" pInputText [value]="material.valorCompra | currency:'BRL':'symbol'" readonly class="w-full" />
+      </div>
+    </div>
+
+    <div class="campo">
+      <label>Data de Aquisição</label>
+      <input type="text" pInputText [value]="material.dataAquisicao | date:'dd/MM/yyyy'" readonly class="w-full" />
+    </div>
+
+    <div class="p-field p-col-12" style="text-align:center; margin-top:1rem;">
+      <div id="qr-visualizar" style="width: 120px; height: 120px; margin: 0 auto;"></div>
+    </div>
+  </div>
+
+  <p-footer>
+    <button pButton type="button" label="Fechar" icon="pi pi-times" 
+      (click)="materialVisualizarDialog = false" class="p-button-text"></button>
+  </p-footer>
+</p-dialog>
+
+
+
+
 
 <!-- MODAL DE CADASTRO/EDIÇÃO -->
 <p-dialog 
@@ -303,20 +434,20 @@
       </div>
     </div>
 
-      <!-- Data de Aquisição -->
-<div class="campo">
-  <label for="dataAquisicao" class="block font-bold mb-2">Data de Aquisição</label>
-  <p-datePicker 
-    id="dataAquisicao"
-    [(ngModel)]="material.dataAquisicao"
-    [showIcon]="true"
-    [locale]="br"
-    [dateFormat]="'dd/mm/yy'"
-    placeholder="Selecione a data"
-    class="w-full campo-grande">
-  </p-datePicker>
-</div>
-</div>
+    <!-- Data de Aquisição -->
+    <div class="campo">
+      <label for="dataAquisicao" class="block font-bold mb-2">Data de Aquisição</label>
+      <p-datePicker 
+        id="dataAquisicao"
+        [(ngModel)]="material.dataAquisicao"
+        [showIcon]="true"
+        [locale]="br"
+        [dateFormat]="'dd/mm/yy'"
+        placeholder="Selecione a data"
+        class="w-full campo-grande">
+      </p-datePicker>
+    </div>
+  </div>
 
   <!-- FOOTER -->
   <ng-template #footer>

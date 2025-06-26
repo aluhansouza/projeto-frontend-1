@@ -9,13 +9,13 @@
 
 /* Estilos de layout para campos duplos e triplos */
 .campo-duplo, .campo-triplo {
-  display: flex;
-  gap: 1rem;
+    display: flex;
+    gap: 1rem;
 }
 
 .campo-duplo > div,
 .campo-triplo > div {
-  flex: 1;
+    flex: 1;
 }
 
 /* Padding ajustado para o rótulo */
@@ -28,43 +28,43 @@
 .campo textarea,
 .campo .p-select,
 .campo .p-inputnumber-input {
-  background-color: var(--surface-ground); /* cinza claro */
-  border: 1px solid #d1d5db;
-  box-sizing: border-box; /* Para evitar problemas no padding e borda */
+    background-color: var(--surface-ground); /* cinza claro */
+    border: 1px solid #d1d5db;
+    box-sizing: border-box; /* Para evitar problemas no padding e borda */
 }
 
 /* InputNumber específico */
 ::ng-deep .input-igual .p-inputnumber-input {
-  background-color: var(--surface-ground) !important;
-  border: 1px solid #d1d5db !important;
+    background-color: var(--surface-ground) !important;
+    border: 1px solid #d1d5db !important;
 }
 
 /* Estilos do p-calendar para o input de data */
 ::ng-deep p-datePicker input.p-inputtext {
-  background-color: var(--surface-ground) !important;
-  border: 1px solid #d1d5db !important;
-  height: 3rem !important;
-  font-size: 1.1rem !important;
-  padding: 0.5rem !important;
-  border-radius: 4px;
+    background-color: var(--surface-ground) !important;
+    border: 1px solid #d1d5db !important;
+    height: 3rem !important;
+    font-size: 1.1rem !important;
+    padding: 0.5rem !important;
+    border-radius: 4px;
 }
 
 /* Layout do rodapé */
 .footer-flex {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding-top: 1rem;
 }
 
 .footer-left, .footer-right {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .footer-left > *:not(:last-child) {
-  margin-right: 0.5rem;
+    margin-right: 0.5rem;
 }
 
 /* Estilo para inputs quando estão em foco */
@@ -74,44 +74,43 @@
 .campo .p-inputNumber.p-focus input,
 .campo .p-datePicker.p-focus input,
 .campo .p-inputtext:focus {
-  outline: none;
-  border-color: var(--primary-color) !important;
-  box-shadow: 0 0 0 0.1rem rgba(0, 123, 255, 0.25); /* Leve realce */
- 
+    outline: none;
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 0.1rem rgba(0, 123, 255, 0.25); /* Leve realce */
 }
 
 /* Estilos para o select quando está em foco */
 ::ng-deep .p-select.p-focus {
-  border-color: var(--primary-color) !important;
-  box-shadow: 0 0 0 0.1rem rgba(0, 123, 255, 0.25);
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 0.1rem rgba(0, 123, 255, 0.25);
 }
 
 /* Estilos para Data de Aquisição - p-calendar */
 ::ng-deep .p-datePicker.p-focus > .p-inputtext,
 ::ng-deep .p-datePicker.p-focus input {
-  border-color: var(--primary-color) !important;
-  box-shadow: 0 0 0 0.15rem rgba(32, 113, 195, 0.25); /* Efeito leve */
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 0.15rem rgba(32, 113, 195, 0.25); /* Efeito leve */
 }
 
 /* Estilos para Percentual de Depreciação - p-inputNumber */
 ::ng-deep .p-inputNumber.p-focus input {
-  border-color: var(--primary-color) !important;
-  box-shadow: 0 0 0 0.15rem rgba(32, 113, 195, 0.25);
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 0.15rem rgba(32, 113, 195, 0.25);
 }
 
 /* Foco no input do p-inputnumber */
 ::ng-deep .p-inputNumber-input:focus {
-  border-color: var(--primary-color) !important;
-  box-shadow: 0 0 0 0.15rem rgba(32, 113, 195, 0.5);
-  background-color: #f0f9ff !important;
-  outline: none !important;
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 0.15rem rgba(32, 113, 195, 0.5);
+    background-color: #f0f9ff !important;
+    outline: none !important;
 }
 
 /* Foco no input de data do p-datepicker */
 ::ng-deep input.p-datepicker-input:focus {
-  border-color: var(--primary-color) !important;
-  box-shadow: 0 0 0 0.15rem rgba(32, 113, 195, 0.5) !important;
-  outline: none !important;
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 0.15rem rgba(32, 113, 195, 0.5) !important;
+    outline: none !important;
 }
 
 /* Estilos para o spinner de carregamento (muda a cor para verde) */
@@ -176,13 +175,47 @@ form.p-fluid .p-select {
 
 /* Estilos para campo grande */
 ::ng-deep .p-datepicker input.p-inputtext {
-  height: 3rem !important;
-  font-size: 1.1rem !important;
-  padding: 0.75rem !important;
-  border-radius: 4px !important;
+    height: 3rem !important;
+    font-size: 1.1rem !important;
+    padding: 0.75rem !important;
+    border-radius: 4px !important;
 }
 
 ::ng-deep .p-datepicker,
 ::ng-deep .p-datepicker input.p-inputtext {
-  width: 100% !important;
+    width: 100% !important;
+}
+/* Aplica borda e fundo no container do p-inputNumber */
+.input-igual {
+  background-color: var(--surface-ground);
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  display: inline-flex;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* Aplica borda, fundo e foco no input interno do p-inputNumber */
+::ng-deep .input-igual .p-inputnumber-input {
+  background-color: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 1.1rem;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* Estilo quando o p-inputNumber estiver em foco */
+::ng-deep .input-igual.p-focus {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 0.15rem rgba(32, 113, 195, 0.5);
+}
+
+.input-igual:focus-within {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 0.15rem rgba(32, 113, 195, 0.5);
 }

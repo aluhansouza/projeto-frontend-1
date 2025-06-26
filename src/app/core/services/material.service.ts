@@ -70,5 +70,10 @@ export class MaterialService {
 
   atualizarComImagem(id: number, formData: FormData): Observable<MaterialResponseDTO> {
     return this.http.put<MaterialResponseDTO>(`${this.apiUrl}/${id}/com-imagem`, formData);
-  }
+ }
+buscarPorId(id: number): Observable<MaterialResponseDTO> {
+  return this.http.get<MaterialResponseDTO>(`${this.apiUrl}/${id}`);
+}
+
+
 }
