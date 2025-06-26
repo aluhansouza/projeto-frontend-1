@@ -93,6 +93,7 @@ export class MateriaisComponent implements OnInit {
   setores: SetorResponseDTO[] = [];
   categorias: CategoriaResponseDTO[] = [];
   origens: OrigemResponseDTO[] = [];
+  br: any;
   situacoes = [
     { label: 'Disponível', value: Situacao.DISPONIVEL },
     { label: 'Emprestado', value: Situacao.EMPRESTADO },
@@ -124,7 +125,24 @@ constructor(
   private setorService: SetorService,
   private categoriaService: CategoriaService,
   private origemService: OrigemService,
-) {}
+) {
+    this.br = {
+      firstDayOfWeek: 0,
+      dayNames: ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'],
+      dayNamesShort: ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'],
+      dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
+      monthNames: [
+        'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
+        'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'
+      ],
+      monthNamesShort: [
+        'jan', 'fev', 'mar', 'abr', 'mai', 'jun',
+        'jul', 'ago', 'set', 'out', 'nov', 'dez'
+      ],
+      today: 'Hoje',
+      clear: 'Limpar'
+    };
+  }
 
 
 formularioValido(): boolean {
@@ -141,8 +159,8 @@ formularioValido(): boolean {
   ngOnInit(): void {
     this.carregarMateriais();
     this.carregarSetores();
-//    this.carregarCategorias();
-//    this.carregarOrigens();
+    this.carregarCategorias();
+    this.carregarOrigens();
   }
   
   carregarMateriais(): void {
@@ -181,29 +199,13 @@ formularioValido(): boolean {
   });
 }
 
-    carregarSetoress(): void{
-        this.carregando = true;
-        this.setorService.listarTodos().subscribe({
-            next: (dados) => {
-                this.setores = dados;
-                console.log(this.setores);
-            },
-            error: (err) => {
-                console.error('Erro ao carregar setores', err);
-            }
-        });
-    }
 
-
-
-
-
-carregarCategorias(): void {
+ carregarCategorias(): void {
   this.carregando = true;
   this.categoriaService.listarTodos().subscribe({
-    next: (dados: CategoriaApiResponse) => {
+    next: (dados/*: CategoriaApiResponse*/) => {
       console.log(dados);
-      this.categorias = dados._embedded.categoria;
+      this.categorias = dados/*._embedded.setores*/;
     },
     error: (err) => {
       console.error('Erro ao carregar categorias', err);
@@ -214,12 +216,12 @@ carregarCategorias(): void {
   });
 }
 
-carregarOrigens(): void {
+ carregarOrigens(): void {
   this.carregando = true;
   this.origemService.listarTodos().subscribe({
-    next: (dados: OrigemApiResponse) => {
+    next: (dados/*: OrigemApiResponse*/) => {
       console.log(dados);
-      this.origens = dados._embedded.origem;
+      this.origens = dados/*._embedded.origens*/;
     },
     error: (err) => {
       console.error('Erro ao carregar origens', err);

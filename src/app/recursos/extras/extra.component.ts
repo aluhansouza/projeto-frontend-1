@@ -157,25 +157,29 @@ formularioValidoOrigem(): boolean {
 }*/
 
 
-    carregarSetores() {
-        this.setorService.listarTodos().subscribe({
-            next: (dados) => {
-                this.setores = dados;
-                console.log(this.setores);
-            },
-            error: (err) => {
-                console.error('Erro ao carregar setores', err);
-            }
-        });
+ carregarSetores(): void {
+  this.carregando = true;
+  this.setorService.listarTodos().subscribe({
+    next: (dados/*: SetorApiResponse*/) => {
+      console.log(dados);
+      this.setores = dados/*._embedded.setores*/;
+    },
+    error: (err) => {
+      console.error('Erro ao carregar setores', err);
+    },
+    complete: () => {
+      this.carregando = false;
     }
+  });
+}
 
 
-carregarCategorias(): void {
+ carregarCategorias(): void {
   this.carregando = true;
   this.categoriaService.listarTodos().subscribe({
-    next: (dados: CategoriaApiResponse) => {
+    next: (dados/*: CategoriaApiResponse*/) => {
       console.log(dados);
-      this.categorias = dados._embedded.categoria;
+      this.categorias = dados/*._embedded.setores*/;
     },
     error: (err) => {
       console.error('Erro ao carregar categorias', err);
@@ -186,12 +190,12 @@ carregarCategorias(): void {
   });
 }
 
-carregarOrigens(): void {
+ carregarOrigens(): void {
   this.carregando = true;
   this.origemService.listarTodos().subscribe({
-    next: (dados: OrigemApiResponse) => {
+    next: (dados/*: OrigemApiResponse*/) => {
       console.log(dados);
-      this.origens = dados._embedded.origem;
+      this.origens = dados/*._embedded.origens*/;
     },
     error: (err) => {
       console.error('Erro ao carregar origens', err);
@@ -652,7 +656,7 @@ salvarOrigem(): void {
   onGlobalFilter(table: any, event: Event): void {
     const input = (event.target as HTMLInputElement).value;  
     table.filterGlobal(input, 'contains');
-  }  
+  }
 
     exportCSV() {
         // Implementar exportação se necessário

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { CategoriaRequestDTO } from '../models/categoria/categoriarequestdto.model';
 import { CategoriaResponseDTO } from '../models/categoria/categoriaresponsedto.model';
 import { CategoriaApiResponse } from '../models/categoria/categoria-api-response.model';
@@ -13,8 +14,8 @@ export class CategoriaService {
 
   constructor(private http: HttpClient) {}
 
-  listarTodos(): Observable<CategoriaApiResponse> {
-    return this.http.get<CategoriaApiResponse>(this.apiUrl);
+  listarTodos(): Observable<CategoriaResponseDTO[]> {
+    return this.http.get<CategoriaApiResponse>(this.apiUrl).pipe(map((response: CategoriaApiResponse) => response._embedded.categorias));
   }
 
   cadastrar(categoria: CategoriaRequestDTO): Observable<CategoriaResponseDTO> {

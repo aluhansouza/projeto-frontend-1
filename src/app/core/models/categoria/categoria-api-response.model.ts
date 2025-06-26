@@ -2,7 +2,7 @@ import { CategoriaResponseDTO } from './categoriaresponsedto.model'; // Importe 
 
 export interface CategoriaApiResponse {
     _embedded: {
-        categoria: CategoriaResponseDTO[]; // Array de materiais
+        categorias: CategoriaResponseDTO[]; // Array de materiais
     };
     _links: any; // Links relacionados, se necessário
     page: any; // Informações da página, se aplicável

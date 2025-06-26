@@ -1,8 +1,8 @@
 import { CategoriaRequestDTO } from './categoriarequestdto.model';
 import { CategoriaResponseDTO } from './categoriaresponsedto.model';
 
-export function toCategoriaRequestDTO(setor: CategoriaResponseDTO): CategoriaRequestDTO {
+export function toCategoriaRequestDTO(categoria: CategoriaResponseDTO): CategoriaRequestDTO {
   return {
-    nome: setor.nome ?? '',
+    nome: categoria.nome ?? '',
   };
 }

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { OrigemRequestDTO } from '../models/origem/origemrequestdto.model';
 import { OrigemResponseDTO } from '../models/origem/origemresponsedto.model';
 import { OrigemApiResponse } from '../models/origem/origem-api-response.model';
@@ -13,8 +14,8 @@ export class OrigemService {
 
   constructor(private http: HttpClient) {}
 
-  listarTodos(): Observable<OrigemApiResponse> {
-    return this.http.get<OrigemApiResponse>(this.apiUrl);
+  listarTodos(): Observable<OrigemResponseDTO[]> {
+    return this.http.get<OrigemApiResponse>(this.apiUrl).pipe(map((response: OrigemApiResponse) => response._embedded.origens));
   }
 
   cadastrar(origem: OrigemRequestDTO): Observable<OrigemResponseDTO> {

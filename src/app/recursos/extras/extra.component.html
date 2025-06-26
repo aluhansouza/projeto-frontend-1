@@ -17,7 +17,7 @@
 <div class="container-tabelas">
 <!-- TABELA DE SETORES -->
 <p-table 
-  #dt 
+  #dtSetor 
   [value]="setores" 
   [(selection)]="selectedSetores" 
   [paginator]="true" 
@@ -39,7 +39,7 @@
     <!-- Barra de pesquisa -->
     <p-iconfield>
       <p-inputicon styleClass="pi pi-search"></p-inputicon>
-      <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Pesquisar..." />
+      <input pInputText type="text" (input)="onGlobalFilter(dtSetor, $event)" placeholder="Pesquisar..." />
     </p-iconfield>
   </div>
 
@@ -153,7 +153,7 @@
 
 <!-- TABELA DE CATEGORIAS -->
 <p-table 
-  #dt 
+  #dtCategoria
   [value]="categorias" 
   [(selection)]="selectedCategorias" 
   [paginator]="true" 
@@ -175,7 +175,7 @@
     <!-- Barra de pesquisa -->
     <p-iconfield>
       <p-inputicon styleClass="pi pi-search"></p-inputicon>
-      <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Pesquisar..." />
+      <input pInputText type="text" (input)="onGlobalFilter(dtCategoria, $event)" placeholder="Pesquisar..." />
     </p-iconfield>
   </div>
 
@@ -289,7 +289,7 @@
 
 <!-- TABELA DE ORIGEM -->
 <p-table 
-  #dt 
+  #dtOrigem
   [value]="origens" 
   [(selection)]="selectedOrigens" 
   [paginator]="true" 
@@ -311,7 +311,7 @@
     <!-- Barra de pesquisa -->
     <p-iconfield>
       <p-inputicon styleClass="pi pi-search"></p-inputicon>
-      <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Pesquisar..." />
+      <input pInputText type="text" (input)="onGlobalFilter(dtOrigem, $event)" placeholder="Pesquisar..." />
     </p-iconfield>
   </div>
 

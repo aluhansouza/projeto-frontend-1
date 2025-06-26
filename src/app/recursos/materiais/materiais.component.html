@@ -297,19 +297,19 @@
     </div>
 
       <!-- Data de Aquisição -->
-      <div class="campo">
-        <label for="dataAquisicao" class="block font-bold mb-2">Data de Aquisição</label>
-        <p-datePicker 
-          id="dataAquisicao"
-          [(ngModel)]="material.dataAquisicao"
-          [showIcon]="true"
-          placeholder="Selecione a data"
-          class="w-full campo-grande">
-        </p-datePicker>
-      </div>
-
-
-  </div>
+<div class="campo">
+  <label for="dataAquisicao" class="block font-bold mb-2">Data de Aquisição</label>
+  <p-datePicker 
+    id="dataAquisicao"
+    [(ngModel)]="material.dataAquisicao"
+    [showIcon]="true"
+    [locale]="br"
+    [dateFormat]="'dd/mm/yy'"
+    placeholder="Selecione a data"
+    class="w-full campo-grande">
+  </p-datePicker>
+</div>
+</div>
 
   <!-- FOOTER -->
   <ng-template #footer>

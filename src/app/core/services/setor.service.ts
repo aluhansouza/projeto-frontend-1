@@ -14,13 +14,9 @@ export class SetorService {
 
   constructor(private http: HttpClient) {}
 
-  listarTodoss(): Observable<SetorApiResponse> {
-    return this.http.get<SetorApiResponse>(this.apiUrl);
-  }
-
   listarTodos(): Observable<SetorResponseDTO[]> {
-        return this.http.get<SetorApiResponse>(this.apiUrl).pipe(map((response: SetorApiResponse) => response._embedded.setores));
-    }
+    return this.http.get<SetorApiResponse>(this.apiUrl).pipe(map((response: SetorApiResponse) => response._embedded.setores));
+  }
 
 
   cadastrar(setor: SetorRequestDTO): Observable<SetorResponseDTO> {
