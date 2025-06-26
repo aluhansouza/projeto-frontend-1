@@ -1,0 +1,194 @@
+/* Centraliza o spinner */
+::ng-deep .overlay-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1000;
+    transform: translate(-50%, -50%);
+}
+
+/* Estilos de layout para campos duplos e triplos */
+.campo-duplo, .campo-triplo {
+  display: flex;
+  gap: 1rem;
+}
+
+.campo-duplo > div,
+.campo-triplo > div {
+  flex: 1;
+}
+
+/* Padding ajustado para o rótulo */
+.label {
+    padding-top: -30px;
+}
+
+/* Estilos gerais para inputs, textareas, selects e p-inputnumber */
+.campo input,
+.campo textarea,
+.campo .p-select,
+.campo .p-inputnumber-input {
+  background-color: var(--surface-ground); /* cinza claro */
+  border: 1px solid #d1d5db;
+  box-sizing: border-box; /* Para evitar problemas no padding e borda */
+}
+
+/* InputNumber específico */
+::ng-deep .input-igual .p-inputnumber-input {
+  background-color: var(--surface-ground) !important;
+  border: 1px solid #d1d5db !important;
+}
+
+/* Estilos do p-calendar para o input de data */
+::ng-deep p-datePicker input.p-inputtext {
+  background-color: var(--surface-ground) !important;
+  border: 1px solid #d1d5db !important;
+  height: 3rem !important;
+  font-size: 1.1rem !important;
+  padding: 0.5rem !important;
+  border-radius: 4px;
+}
+
+/* Layout do rodapé */
+.footer-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-top: 1rem;
+}
+
+.footer-left, .footer-right {
+  display: flex;
+  align-items: center;
+}
+
+.footer-left > *:not(:last-child) {
+  margin-right: 0.5rem;
+}
+
+/* Estilo para inputs quando estão em foco */
+.campo input:focus,
+.campo textarea:focus,
+.campo .p-select.p-focus,
+.campo .p-inputNumber.p-focus input,
+.campo .p-datePicker.p-focus input,
+.campo .p-inputtext:focus {
+  outline: none;
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 0.1rem rgba(0, 123, 255, 0.25); /* Leve realce */
+ 
+}
+.container-tabelas {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem; /* espaço lateral entre as tabelas */
+  padding: 1.5rem; /* evita colar nas bordas */
+}
+
+/* Estilos para o select quando está em foco */
+::ng-deep .p-select.p-focus {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 0.1rem rgba(0, 123, 255, 0.25);
+}
+
+/* Estilos para Data de Aquisição - p-calendar */
+::ng-deep .p-datePicker.p-focus > .p-inputtext,
+::ng-deep .p-datePicker.p-focus input {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 0.15rem rgba(32, 113, 195, 0.25); /* Efeito leve */
+}
+
+/* Estilos para Percentual de Depreciação - p-inputNumber */
+::ng-deep .p-inputNumber.p-focus input {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 0.15rem rgba(32, 113, 195, 0.25);
+}
+
+/* Foco no input do p-inputnumber */
+::ng-deep .p-inputNumber-input:focus {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 0.15rem rgba(32, 113, 195, 0.5);
+  background-color: #f0f9ff !important;
+  outline: none !important;
+}
+
+/* Foco no input de data do p-datepicker */
+::ng-deep input.p-datepicker-input:focus {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 0.15rem rgba(32, 113, 195, 0.5) !important;
+  outline: none !important;
+}
+
+/* Estilos para o spinner de carregamento (muda a cor para verde) */
+.p-button.p-button-loading .p-button-loading-icon {
+    color: green !important; /* Cor verde */
+}
+
+/* Garante que o spinner do botão seja verde */
+.p-button-loading {
+    border-color: green !important;
+    background-color: green !important;
+}
+
+/* Altera o ícone de carregamento para branco */
+.p-button.p-button-loading .p-button-loading-icon {
+    color: white !important;
+}
+
+/* Estilos para o botão de carregamento */
+.p-button.p-button-loading {
+    background-color: green !important;
+    border-color: green !important;
+}
+
+/* Estilos para o spinner customizado */
+.custom-spinner .p-progress-spinner-circle {
+    border-top-color: green; /* Cor do spinner */
+}
+
+.custom-spinner .p-progress-spinner {
+    border-color: rgba(0, 0, 0, 0.1); /* Cor do fundo */
+}
+
+/* Garantir que o spinner seja verde */
+::ng-deep .custom-spinner .p-progress-spinner-circle {
+    stroke: #22c55e !important;
+}
+
+/* Estilo para o círculo do spinner */
+.p-progress-spinner-circle {
+    stroke: #22c55e !important;
+}
+
+/* Estilos para inputs grandes */
+.input-grande {
+    height: 3rem;
+    font-size: 1.1rem;
+    padding: 0.75rem;
+}
+
+/* Ajuste de altura para inputs no formulário */
+form.p-fluid input,
+form.p-fluid .p-select {
+    height: 3rem;
+    font-size: 1.1rem;
+}
+
+/* Estilo para campos dentro de um formulário */
+.formulario-Material .p-field {
+    margin-bottom: 1.5rem;
+}
+
+/* Estilos para campo grande */
+::ng-deep .p-datepicker input.p-inputtext {
+  height: 3rem !important;
+  font-size: 1.1rem !important;
+  padding: 0.75rem !important;
+  border-radius: 4px !important;
+}
+
+::ng-deep .p-datepicker,
+::ng-deep .p-datepicker input.p-inputtext {
+  width: 100% !important;
+}

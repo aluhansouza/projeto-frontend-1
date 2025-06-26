@@ -1,0 +1,350 @@
+<!-- TOPO DA TABELA -->
+<p-toolbar styleClass="mb-6">
+  <ng-template #start>
+    <p-button label="Novo Material" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="novoMaterial()" />
+    <p-button 
+      label="Excluir" 
+      icon="pi pi-trash" 
+      severity="secondary" 
+      outlined 
+      (onClick)="excluirSelecionados()" 
+      [disabled]="!selectedMateriais || !selectedMateriais.length" 
+    />
+  </ng-template>
+
+  <ng-template #end>
+    <p-button label="Exportar para CSV" icon="pi pi-upload" severity="secondary" (onClick)="exportCSV()" />
+  </ng-template>
+</p-toolbar>
+
+<!-- SPINNERS -->
+<app-spinner-gradiente *ngIf="loadingSalvar || loadingExcluir || loadingExcluirMassa"></app-spinner-gradiente>
+<app-spinner-overlay [visible]="loadingExcluirMassa || loadingExcluir" />
+
+<!-- TABELA DE MATERIAIS -->
+<p-table 
+  #dt 
+  [value]="materiais" 
+  [(selection)]="selectedMateriais" 
+  [paginator]="true" 
+  [rows]="10" 
+  [rowHover]="true" 
+  [rowsPerPageOptions]="[5,10,20]" 
+  dataKey="id"
+  [tableStyle]="{ 'min-width': '75rem' }"
+  [globalFilterFields]="['nome', 'situacao', 'patrimonio', 'setor.nome', 'categoria.nome', 'origem.nome']"
+  currentPageReportTemplate="Mostrando de {first} até {last} de {totalRecords} materiais"
+  [showCurrentPageReport]="true"
+  [responsiveLayout]="'scroll'">
+
+  <ng-template #caption>
+    <div class="flex items-center justify-between">
+      <h5 class="m-0">Gerenciar Materiais</h5>
+      <p-iconfield>
+        <p-inputicon styleClass="pi pi-search"></p-inputicon>
+        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Pesquisar..." />
+      </p-iconfield>
+    </div>
+  </ng-template>
+
+  <ng-template #header>
+    <tr>
+      <th style="width: 3rem"><p-tableHeaderCheckbox /></th>
+      <th pSortableColumn="id">ID <p-sortIcon field="id" /></th>
+      <th pSortableColumn="nome">Nome <p-sortIcon field="nome" /></th>
+      <th pSortableColumn="situacao">Situação <p-sortIcon field="situacao" /></th>
+      <th pSortableColumn="patrimonio">Patrimônio <p-sortIcon field="patrimonio" /></th>
+      <th pSortableColumn="setor.nome">Setor <p-sortIcon field="setor.nome" /></th>
+      <th pSortableColumn="categoria.nome">Categoria <p-sortIcon field="categoria.nome" /></th>
+      <th pSortableColumn="origem.nome">Origem <p-sortIcon field="origem.nome" /></th>
+      <th>Ações</th>
+    </tr>
+  </ng-template>
+
+  <ng-template #body let-material>
+    <tr>
+      <td><p-tableCheckbox [value]="material" /></td>
+      <td>{{ material.id }}</td>
+      <td>{{ material.nome }}</td>
+      <td>
+  <p-tag 
+    [value]="material.situacao" 
+    [severity]="situacaoToSeverity(material.situacao)" />
+</td>
+
+      <td>{{ material.patrimonio }}</td>
+      <td>{{ material.setor?.nome || 'Setor não definido' }}</td>
+      <td>{{ material.categoria?.nome || 'Categoria não definida' }}</td>
+      <td>{{ material.origem?.nome || 'Origem não definida' }}</td>
+      <td>
+        <p-button 
+          icon="pi pi-pencil" 
+          class="mr-2" 
+          (click)="editarMaterial(material)" 
+          [rounded]="true" 
+          [outlined]="true" 
+          severity="secondary" 
+        />
+        <p-button 
+          icon="pi pi-trash" 
+          (click)="deletarMaterial(material.id!)" 
+          [rounded]="true" 
+          [outlined]="true" 
+          severity="danger" 
+        />
+      </td>
+    </tr>
+  </ng-template>
+  
+</p-table>
+
+<!-- MODAL DE CADASTRO/EDIÇÃO -->
+<p-dialog 
+  [(visible)]="materialDialog" 
+  [style]="{ width: '900px', height: 'auto' }" 
+  header="Detalhes do Material" 
+  [modal]="true">
+
+  <!-- SPINNER DE SALVAR -->
+  <p-progressSpinner 
+    *ngIf="loadingSalvar" 
+    styleClass="overlay-spinner custom-spinner" 
+    strokeWidth="4" 
+    animationDuration=".5s" 
+    aria-label="Salvando...">
+  </p-progressSpinner>
+
+  <div class="flex flex-col gap-6" *ngIf="!loadingSalvar">
+    <div class="campo-duplo">
+      <!-- Nome -->
+      <div class="campo">
+        <label for="nome" class="block font-bold mb-2">Nome</label>
+        <input 
+          type="text" 
+          pInputText 
+          id="nome" 
+          [(ngModel)]="material.nome" 
+          required 
+          autofocus 
+          class="w-full" 
+        />
+        <small class="text-red-500" *ngIf="submitted && !material.nome">Nome é obrigatório.</small>
+      </div>
+
+      <!-- Patrimônio -->
+      <div class="campo">
+        <label for="patrimonio" class="block font-bold mb-2">Patrimônio</label>
+        <input 
+          type="text" 
+          pInputText 
+          id="patrimonio" 
+          [(ngModel)]="material.patrimonio" 
+          required 
+          class="w-full" 
+          (keypress)="onPatrimonioKeyPress($event)"
+        />
+        <small class="text-red-500" *ngIf="submitted && !material.patrimonio">Patrimônio é obrigatório.</small>
+      </div>
+    </div>
+
+    <!-- Situação -->
+    <div class="campo">
+      <label for="situacao" class="block font-bold mb-2">Situação</label>
+      <p-select 
+        id="situacao" 
+        [options]="situacoes" 
+        [(ngModel)]="material.situacao" 
+        placeholder="Selecione uma situação" 
+        class="w-full" 
+        optionLabel="label" 
+        optionValue="value">
+      </p-select>
+      <small class="text-red-500" *ngIf="submitted && !material.situacao">Situação é obrigatória.</small>
+    </div>
+
+    <!-- Setor, Categoria, Origem -->
+    <div class="campo-triplo">
+      <!-- Setor -->
+      <div class="campo">
+        <label for="setor" class="block font-bold mb-2">Setor</label>
+        <p-select
+          id="setor" 
+          [options]="setores" 
+          [(ngModel)]="material.setorId" 
+          optionLabel="nome" 
+          optionValue="id" 
+          placeholder="Selecione um setor" 
+          class="w-full">
+        </p-select>
+        <small class="text-red-500" *ngIf="submitted && !material.setorId">Setor é obrigatório.</small>
+      </div>
+
+      <!-- Categoria -->
+      <div class="campo">
+        <label for="categoria" class="block font-bold mb-2">Categoria</label>
+        <p-select 
+          id="categoria" 
+          [options]="categorias" 
+          [(ngModel)]="material.categoriaId" 
+          optionLabel="nome" 
+          optionValue="id" 
+          placeholder="Selecione uma categoria" 
+          class="w-full">
+        </p-select>
+        <small class="text-red-500" *ngIf="submitted && !material.categoriaId">Categoria é obrigatória.</small>
+      </div>
+
+      <!-- Origem -->
+      <div class="campo">
+        <label for="origem" class="block font-bold mb-2">Origem</label>
+        <p-select 
+          id="origem" 
+          [options]="origens" 
+          [(ngModel)]="material.origemId" 
+          optionLabel="nome" 
+          optionValue="id" 
+          placeholder="Selecione uma origem" 
+          class="w-full">
+        </p-select>
+        <small class="text-red-500" *ngIf="submitted && !material.origemId">Origem é obrigatória.</small>
+      </div>
+    </div>
+
+    <!-- Localização Física -->
+    <div class="campo">
+      <label for="localizacao_fisica" class="block font-bold mb-2">Localização Física</label>
+      <input 
+        type="text" 
+        pInputText 
+        id="localizacao_fisica" 
+        [(ngModel)]="material.localizacaoFisica" 
+        class="w-full" 
+      />
+    </div>
+
+    <!-- Descrição -->
+    <div class="campo">
+      <label for="descricao" class="block font-bold mb-2">Descrição</label>
+      <textarea 
+        pInputTextarea 
+        id="descricao" 
+        [(ngModel)]="material.descricao" 
+        rows="3" 
+        class="w-full">
+      </textarea>
+    </div>
+
+    <!-- Identificação do Recibo -->
+    <div class="campo">
+      <label for="identificacao_recibo" class="block font-bold mb-2">Identificação do Recibo</label>
+      <input 
+        type="text" 
+        pInputText 
+        id="identificacao_recibo" 
+        [(ngModel)]="material.identificacaoRecibo" 
+        class="w-full" 
+        (keypress)="onReciboKeyPress($event)"
+      />
+    </div>
+
+    <!-- Tipo de Depreciação e Percentual -->
+    <div class="campo-triplo">
+      <!-- Tipo de Depreciação -->
+      <div class="campo">
+        <label for="tipo_depreciacao" class="block font-bold mb-2">Tipo de Depreciação</label>
+        <p-select 
+          id="tipo_depreciacao"
+          [options]="[
+            { label: 'Linear', value: 'LINEAR' },
+            { label: 'Acelerada', value: 'ACELERADA' }
+          ]"
+          [(ngModel)]="material.tipoDepreciacao"
+          placeholder="Selecione o tipo"
+          class="w-full">
+        </p-select>
+      </div>
+
+      <!-- Percentual de Depreciação -->
+      <div class="campo">
+        <label for="percentual_depreciacao" class="block font-bold mb-2">Depreciação (%)</label>
+        <p-inputNumber
+          id="percentual_depreciacao"
+          [(ngModel)]="material.percentualDepreciacao"
+          mode="decimal"
+          min="0"
+          max="100"
+          step="0.1"
+          suffix="%"
+          [useGrouping]="false"
+          class="w-full input-igual">
+        </p-inputNumber>
+      </div>
+
+      <!-- Valor Compra -->
+      <div class="campo">
+        <label for="valorCompra" class="block font-bold mb-2">Valor Compra (R$)</label>
+        <input 
+          type="number" 
+          pInputText 
+          id="valorCompra" 
+          [(ngModel)]="material.valorCompra" 
+          min="0" 
+          step="0.01" 
+          class="w-full" 
+          placeholder="0,00"
+        />
+      </div>
+    </div>
+
+      <!-- Data de Aquisição -->
+      <div class="campo">
+        <label for="dataAquisicao" class="block font-bold mb-2">Data de Aquisição</label>
+        <p-datePicker 
+          id="dataAquisicao"
+          [(ngModel)]="material.dataAquisicao"
+          [showIcon]="true"
+          placeholder="Selecione a data"
+          class="w-full campo-grande">
+        </p-datePicker>
+      </div>
+
+
+  </div>
+
+  <!-- FOOTER -->
+  <ng-template #footer>
+    <div class="footer-flex">
+      <div class="footer-right">
+        <p-fileUpload
+          mode="basic"
+          name="imagem"
+          accept="image/*"
+          chooseLabel="Upload Imagem"
+          (onSelect)="onImagemSelecionada($event)"
+          [auto]="true"
+        ></p-fileUpload>
+      </div>
+
+      <div class="footer-left">
+        <p-button 
+          label="Cancelar" 
+          icon="pi pi-times" 
+          text 
+          (click)="materialDialog = false">
+        </p-button>
+
+        <p-button
+          label="Salvar"
+          icon="pi pi-check"
+          (click)="salvarMaterial()"
+          [disabled]="loadingSalvar || !formularioValido()"
+          [loading]="loadingSalvar"
+          class="ml-2"
+        ></p-button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<!-- DIALOG DE CONFIRMAÇÃO -->
+<p-confirmdialog [style]="{ width: '500px' }"></p-confirmdialog>

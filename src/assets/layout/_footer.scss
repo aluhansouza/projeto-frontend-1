@@ -1,0 +1,10 @@
+.layout-footer {
+    display: flex;
+    align-items: center;
+    color: black;
+    justify-content: center;
+    padding: 1rem 0 1rem 0;
+    background-color: white;
+    gap: 0.5rem;
+    border-top: 1px solid var(--surface-border);
+}

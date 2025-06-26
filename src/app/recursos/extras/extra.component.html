@@ -1,0 +1,418 @@
+<!-- DIALOG DE CONFIRMAÇÃO -->
+<p-confirmdialog [style]="{ width: '500px' }"></p-confirmdialog>
+
+<!-- SPINNERS -->
+<app-spinner-gradiente *ngIf="loadingSalvar || loadingExcluir || loadingExcluirMassa"></app-spinner-gradiente>
+<app-spinner-overlay [visible]="loadingExcluirMassa || loadingExcluir" />
+<p-progressSpinner 
+  *ngIf="loadingSalvar" 
+  styleClass="overlay-spinner custom-spinner" 
+  strokeWidth="4" 
+  animationDuration=".5s" 
+  aria-label="Salvando...">
+</p-progressSpinner>
+
+
+
+<div class="container-tabelas">
+<!-- TABELA DE SETORES -->
+<p-table 
+  #dt 
+  [value]="setores" 
+  [(selection)]="selectedSetores" 
+  [paginator]="true" 
+  [rows]="10" 
+  [rowHover]="true" 
+  [rowsPerPageOptions]="[5,10,20]" 
+  dataKey="id"
+  [tableStyle]="{ 'min-width': '40rem' }"
+  [globalFilterFields]="['nome']"
+  currentPageReportTemplate="Mostrando de {first} até {last} de {totalRecords} setores"
+  [showCurrentPageReport]="true"
+  [responsiveLayout]="'scroll'">
+
+  <!-- TOPO: AÇÕES E FILTRO -->
+<ng-template #caption>
+  <div class="flex items-center justify-between">
+    <h5 class="m-0">Gerenciar Setores</h5>
+
+    <!-- Barra de pesquisa -->
+    <p-iconfield>
+      <p-inputicon styleClass="pi pi-search"></p-inputicon>
+      <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Pesquisar..." />
+    </p-iconfield>
+  </div>
+
+  <!-- Linha de botões: esquerdo (Novo, Excluir), direito (Exportar) -->
+  <div class="mt-3 flex justify-between items-center">
+    <div class="flex gap-2">
+      <p-button label="Novo Setor" icon="pi pi-plus" severity="secondary" (onClick)="novoSetor()" />
+      <p-button 
+        label="Excluir" 
+        icon="pi pi-trash" 
+        severity="secondary" 
+        outlined 
+        (onClick)="excluirSetoresSelecionados()" 
+        [disabled]="!selectedSetores.length" />
+    </div>
+
+    <p-button 
+      label="Exportar para CSV" 
+      icon="pi pi-upload" 
+      severity="secondary" 
+      (onClick)="exportCSV()" />
+  </div>
+</ng-template>
+
+  <!-- CABEÇALHO -->
+  <ng-template #header>
+    <tr>
+      <th style="width: 3rem"><p-tableHeaderCheckbox /></th>
+      <th pSortableColumn="id">ID <p-sortIcon field="id" /></th>
+      <th pSortableColumn="nome">Nome <p-sortIcon field="nome" /></th>
+      <th>Ações</th>
+    </tr>
+  </ng-template>
+
+  <!-- CORPO -->
+  <ng-template #body let-setor>
+    <tr>
+      <td><p-tableCheckbox [value]="setor" /></td>
+      <td>{{ setor.id }}</td>
+      <td>{{ setor.nome }}</td>
+      <td>
+        <p-button 
+          icon="pi pi-pencil" 
+          class="mr-2" 
+          (click)="editarSetor(setor)" 
+          [rounded]="true" 
+          [outlined]="true" 
+          severity="secondary" />
+        <p-button 
+          icon="pi pi-trash" 
+          (click)="deletarSetor(setor.id!)" 
+          [rounded]="true" 
+          [outlined]="true" 
+          severity="danger" />
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<!-- MODAL DE CADASTRO/EDIÇÃO DE SETOR -->
+<p-dialog 
+  [(visible)]="setorDialog" 
+  [style]="{ width: '900px', height: 'auto' }" 
+  header="Detalhes do Setor" 
+  [modal]="true">
+
+  <div class="flex flex-col gap-6" *ngIf="!loadingSalvar">
+    <!-- Nome -->
+    <div class="campo">
+      <label for="nome" class="block font-bold mb-2">Nome</label>
+      <input 
+        type="text" 
+        pInputText 
+        id="nome" 
+        [(ngModel)]="setor.nome" 
+        required 
+        autofocus 
+        class="w-full" />
+      <small class="text-red-500" *ngIf="submitted && !setor.nome">Nome é obrigatório.</small>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <ng-template #footer>
+    <div class="footer-left">
+      <p-button 
+        label="Cancelar" 
+        icon="pi pi-times" 
+        text 
+        (click)="setorDialog = false">
+      </p-button>
+
+      <p-button
+        label="Salvar"
+        icon="pi pi-check"
+        (click)="salvarSetor()"
+        [disabled]="loadingSalvar || !formularioValidoSetor()"
+        [loading]="loadingSalvar"
+        class="ml-2">
+      </p-button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+
+
+
+
+
+
+
+<!-- TABELA DE CATEGORIAS -->
+<p-table 
+  #dt 
+  [value]="categorias" 
+  [(selection)]="selectedCategorias" 
+  [paginator]="true" 
+  [rows]="10" 
+  [rowHover]="true" 
+  [rowsPerPageOptions]="[5,10,20]" 
+  dataKey="id"
+  [tableStyle]="{ 'min-width': '40rem' }"
+  [globalFilterFields]="['nome']"
+  currentPageReportTemplate="Mostrando de {first} até {last} de {totalRecords} categorias"
+  [showCurrentPageReport]="true"
+  [responsiveLayout]="'scroll'">
+
+  <!-- TOPO: AÇÕES E FILTRO -->
+<ng-template #caption>
+  <div class="flex items-center justify-between">
+    <h5 class="m-0">Gerenciar Categorias</h5>
+
+    <!-- Barra de pesquisa -->
+    <p-iconfield>
+      <p-inputicon styleClass="pi pi-search"></p-inputicon>
+      <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Pesquisar..." />
+    </p-iconfield>
+  </div>
+
+  <!-- Linha de botões: esquerdo (Novo, Excluir), direito (Exportar) -->
+  <div class="mt-3 flex justify-between items-center">
+    <div class="flex gap-2">
+      <p-button label="Nova Categoria" icon="pi pi-plus" severity="secondary" (onClick)="novoCategoria()" />
+      <p-button 
+        label="Excluir" 
+        icon="pi pi-trash" 
+        severity="secondary" 
+        outlined 
+        (onClick)="excluirCategoriasSelecionadas()" 
+        [disabled]="!selectedCategorias.length" />
+    </div>
+
+    <p-button 
+      label="Exportar para CSV" 
+      icon="pi pi-upload" 
+      severity="secondary" 
+      (onClick)="exportCSV()" />
+  </div>
+</ng-template>
+
+  <!-- CABEÇALHO -->
+  <ng-template #header>
+    <tr>
+      <th style="width: 3rem"><p-tableHeaderCheckbox /></th>
+      <th pSortableColumn="id">ID <p-sortIcon field="id" /></th>
+      <th pSortableColumn="nome">Nome <p-sortIcon field="nome" /></th>
+      <th>Ações</th>
+    </tr>
+  </ng-template>
+
+  <!-- CORPO -->
+  <ng-template #body let-categoria>
+    <tr>
+      <td><p-tableCheckbox [value]="categoria" /></td>
+      <td>{{ categoria.id }}</td>
+      <td>{{ categoria.nome }}</td>
+      <td>
+        <p-button 
+          icon="pi pi-pencil" 
+          class="mr-2" 
+          (click)="editarCategoria(categoria)" 
+          [rounded]="true" 
+          [outlined]="true" 
+          severity="secondary" />
+        <p-button 
+          icon="pi pi-trash" 
+          (click)="deletarCategoria(categoria.id!)" 
+          [rounded]="true" 
+          [outlined]="true" 
+          severity="danger" />
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<!-- MODAL DE CADASTRO/EDIÇÃO DE CATEGORIA -->
+<p-dialog 
+  [(visible)]="categoriaDialog" 
+  [style]="{ width: '900px', height: 'auto' }" 
+  header="Detalhes da Categoria" 
+  [modal]="true">
+
+  <div class="flex flex-col gap-6" *ngIf="!loadingSalvar">
+    <!-- Nome -->
+    <div class="campo">
+      <label for="nome" class="block font-bold mb-2">Nome</label>
+      <input 
+        type="text" 
+        pInputText 
+        id="nome" 
+        [(ngModel)]="categoria.nome" 
+        required 
+        autofocus 
+        class="w-full" />
+      <small class="text-red-500" *ngIf="submitted && !categoria.nome">Nome é obrigatório.</small>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <ng-template #footer>
+    <div class="footer-left">
+      <p-button 
+        label="Cancelar" 
+        icon="pi pi-times" 
+        text 
+        (click)="categoriaDialog = false">
+      </p-button>
+
+      <p-button
+        label="Salvar"
+        icon="pi pi-check"
+        (click)="salvarCategoria()"
+        [disabled]="loadingSalvar || !formularioValidoCategoria()"
+        [loading]="loadingSalvar"
+        class="ml-2">
+      </p-button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+
+
+
+
+
+
+
+<!-- TABELA DE ORIGEM -->
+<p-table 
+  #dt 
+  [value]="origens" 
+  [(selection)]="selectedOrigens" 
+  [paginator]="true" 
+  [rows]="10" 
+  [rowHover]="true" 
+  [rowsPerPageOptions]="[5,10,20]" 
+  dataKey="id"
+  [tableStyle]="{ 'min-width': '40rem' }"
+  [globalFilterFields]="['nome']"
+  currentPageReportTemplate="Mostrando de {first} até {last} de {totalRecords} origens"
+  [showCurrentPageReport]="true"
+  [responsiveLayout]="'scroll'">
+
+  <!-- TOPO: AÇÕES E FILTRO -->
+<ng-template #caption>
+  <div class="flex items-center justify-between">
+    <h5 class="m-0">Gerenciar Origens</h5>
+
+    <!-- Barra de pesquisa -->
+    <p-iconfield>
+      <p-inputicon styleClass="pi pi-search"></p-inputicon>
+      <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Pesquisar..." />
+    </p-iconfield>
+  </div>
+
+  <!-- Linha de botões: esquerdo (Novo, Excluir), direito (Exportar) -->
+  <div class="mt-3 flex justify-between items-center">
+    <div class="flex gap-2">
+      <p-button label="Nova Origem" icon="pi pi-plus" severity="secondary" (onClick)="novoOrigem()" />
+      <p-button 
+        label="Excluir" 
+        icon="pi pi-trash" 
+        severity="secondary" 
+        outlined 
+        (onClick)="excluirOrigensSelecionadas()" 
+        [disabled]="!selectedOrigens.length" />
+    </div>
+
+    <p-button 
+      label="Exportar para CSV" 
+      icon="pi pi-upload" 
+      severity="secondary" 
+      (onClick)="exportCSV()" />
+  </div>
+</ng-template>
+
+  <!-- CABEÇALHO -->
+  <ng-template #header>
+    <tr>
+      <th style="width: 3rem"><p-tableHeaderCheckbox /></th>
+      <th pSortableColumn="id">ID <p-sortIcon field="id" /></th>
+      <th pSortableColumn="nome">Nome <p-sortIcon field="nome" /></th>
+      <th>Ações</th>
+    </tr>
+  </ng-template>
+
+  <!-- CORPO -->
+  <ng-template #body let-origem>
+    <tr>
+      <td><p-tableCheckbox [value]="origem" /></td>
+      <td>{{ origem.id }}</td>
+      <td>{{ origem.nome }}</td>
+      <td>
+        <p-button 
+          icon="pi pi-pencil" 
+          class="mr-2" 
+          (click)="editarOrigem(origem)" 
+          [rounded]="true" 
+          [outlined]="true" 
+          severity="secondary" />
+        <p-button 
+          icon="pi pi-trash" 
+          (click)="deletarOrigem(origem.id!)" 
+          [rounded]="true" 
+          [outlined]="true" 
+          severity="danger" />
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<!-- MODAL DE CADASTRO/EDIÇÃO DE ORIGEM -->
+<p-dialog 
+  [(visible)]="origemDialog" 
+  [style]="{ width: '900px', height: 'auto' }" 
+  header="Detalhes da Origem" 
+  [modal]="true">
+
+  <div class="flex flex-col gap-6" *ngIf="!loadingSalvar">
+    <!-- Nome -->
+    <div class="campo">
+      <label for="nome" class="block font-bold mb-2">Nome</label>
+      <input 
+        type="text" 
+        pInputText 
+        id="nome" 
+        [(ngModel)]="origem.nome" 
+        required 
+        autofocus 
+        class="w-full" />
+      <small class="text-red-500" *ngIf="submitted && !origem.nome">Nome é obrigatório.</small>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <ng-template #footer>
+    <div class="footer-left">
+      <p-button 
+        label="Cancelar" 
+        icon="pi pi-times" 
+        text 
+        (click)="origemDialog = false">
+      </p-button>
+
+      <p-button
+        label="Salvar"
+        icon="pi pi-check"
+        (click)="salvarOrigem()"
+        [disabled]="loadingSalvar || !formularioValidoOrigem()"
+        [loading]="loadingSalvar"
+        class="ml-2">
+      </p-button>
+    </div>
+  </ng-template>
+</p-dialog>
+</div>
