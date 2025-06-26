@@ -140,23 +140,6 @@ formularioValidoOrigem(): boolean {
     this.carregarOrigens();
   }
 
-/*carregarSetores(): void {
-  this.carregando = true;
-  this.setorService.listarTodos().subscribe({
-    next: (dados: SetorApiResponse) => {
-      console.log(dados);
-      this.setores = dados._embedded.setores;
-    },
-    error: (err) => {
-      console.error('Erro ao carregar setores', err);
-    },
-    complete: () => {
-      this.carregando = false;
-    }
-  });
-}*/
-
-
  carregarSetores(): void {
   this.carregando = true;
   this.setorService.listarTodos().subscribe({

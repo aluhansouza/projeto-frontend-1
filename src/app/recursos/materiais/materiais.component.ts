@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import QRCodeStyling from 'qr-code-styling';
 
 import { MaterialService } from '../../core/services/material.service';
 import { SetorService } from '../../core/services/setor.service';
@@ -125,6 +126,7 @@ constructor(
   private setorService: SetorService,
   private categoriaService: CategoriaService,
   private origemService: OrigemService,
+  
 ) {
     this.br = {
       firstDayOfWeek: 0,
@@ -144,6 +146,7 @@ constructor(
     };
   }
 
+  
 
 formularioValido(): boolean {
   return !!(
@@ -163,25 +166,32 @@ formularioValido(): boolean {
     this.carregarOrigens();
   }
   
-  carregarMateriais(): void {
-      this.carregando = true;
-      this.materialService.listarTodos().subscribe({
-          next: (dados: MaterialApiResponse) => {
-              console.log(dados); // Verifique no console o formato da resposta
-              this.materiais = dados._embedded.materiais; // Agora, dados._embedded.materiais contém o array de materiais
-          },
-          error: (err) => {
-              this.messageService.add({
-                  severity: 'error',
-                  summary: 'Erro',
-                  detail: 'Falha ao carregar os materiais!'
-              });
-          },
-          complete: () => {
-              this.carregando = false;
-          }
+carregarMateriais(): void {
+  this.carregando = true;
+  this.materialService.listarTodos().subscribe({
+    next: (dados: MaterialApiResponse) => {
+      this.materiais = dados._embedded.materiais;
+
+      // Gera os QR Codes após os elementos estarem renderizados no DOM
+      setTimeout(() => {
+        this.materiais.forEach(mat => {
+          this.gerarQrCode(mat.id!, mat.qrValor || mat.nome); // usa `qrValor` ou `nome`
+        });
+      }, 0); // 0ms já é suficiente na maioria dos casos
+    },
+    error: () => {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Erro',
+        detail: 'Falha ao carregar os materiais!'
       });
-  }
+    },
+    complete: () => {
+      this.carregando = false;
+    }
+  });
+}
+
 
  carregarSetores(): void {
   this.carregando = true;
@@ -228,6 +238,35 @@ formularioValido(): boolean {
     },
     complete: () => {
       this.carregando = false;
+    }
+  });
+}
+
+
+gerarQrCode(id: number, valor: string): void {
+  const qr = new QRCodeStyling({
+    width: 60,       // tamanho maior
+    height: 60,
+    data: valor,
+    margin: 0,        // margem menor para menos borda branca
+    dotsOptions: { color: "#000", type: "rounded" },
+    backgroundOptions: { color: "#fff" }
+  });
+
+  const container = document.getElementById('qr-' + id);
+  if (container) {
+    container.innerHTML = ''; // limpa antes de gerar
+    qr.append(container);
+  }
+
+
+
+  const canvasId = `qr-${id}`;
+  setTimeout(() => {
+    const canvasEl = document.getElementById(canvasId);
+    if (canvasEl) {
+      canvasEl.innerHTML = ''; // limpa caso já tenha algo
+      qr.append(canvasEl);
     }
   });
 }
@@ -357,6 +396,15 @@ onReciboKeyPress(event: KeyboardEvent) {
     event.preventDefault();
   }
 }
+
+
+
+
+abrirLink(url: string) {
+  window.open(url, '_blank');
+}
+
+
 
   onGlobalFilter(table: any, event: Event): void {
     const input = (event.target as HTMLInputElement).value;

@@ -52,11 +52,14 @@
       <th style="width: 3rem"><p-tableHeaderCheckbox /></th>
       <th pSortableColumn="id">ID <p-sortIcon field="id" /></th>
       <th pSortableColumn="nome">Nome <p-sortIcon field="nome" /></th>
+      <th pSortableColumn="imagemUrl">Imagem <p-sortIcon field="imagemUrl" /></th>
       <th pSortableColumn="situacao">Situação <p-sortIcon field="situacao" /></th>
       <th pSortableColumn="patrimonio">Patrimônio <p-sortIcon field="patrimonio" /></th>
       <th pSortableColumn="setor.nome">Setor <p-sortIcon field="setor.nome" /></th>
       <th pSortableColumn="categoria.nome">Categoria <p-sortIcon field="categoria.nome" /></th>
       <th pSortableColumn="origem.nome">Origem <p-sortIcon field="origem.nome" /></th>
+      <th pSortableColumn="qrValor">QR Code <p-sortIcon field="qrValor" /></th>
+      
       <th>Ações</th>
     </tr>
   </ng-template>
@@ -66,16 +69,20 @@
       <td><p-tableCheckbox [value]="material" /></td>
       <td>{{ material.id }}</td>
       <td>{{ material.nome }}</td>
+      <td><a [href]="material.imagemUrl" target="_blank">{{ material.imagemUrl }}</a></td>
       <td>
   <p-tag 
     [value]="material.situacao" 
     [severity]="situacaoToSeverity(material.situacao)" />
-</td>
-
+      </td>
       <td>{{ material.patrimonio }}</td>
       <td>{{ material.setor?.nome || 'Setor não definido' }}</td>
       <td>{{ material.categoria?.nome || 'Categoria não definida' }}</td>
       <td>{{ material.origem?.nome || 'Origem não definida' }}</td>
+      <td>
+  <div [id]="'qr-' + material.id" style="width: 60px; height: 60px;"></div>
+</td>
+
       <td>
         <p-button 
           icon="pi pi-pencil" 
