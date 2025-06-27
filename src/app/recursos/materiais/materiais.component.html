@@ -85,7 +85,8 @@
   <td>{{ material.id }}</td>
   <td>{{ material.nome }}</td>
   <td>
-    <a [href]="material.imagemUrl" target="_blank" (click)="$event.stopPropagation()">{{ material.imagemUrl }}</a>
+    <img [src]="material.imagemUrl" alt="Imagem do material" width="100" />
+    <!-- <img src="../../../assets/image/tv.jpg" alt="image"> -->
   </td>
   <td>
     <p-tag 
@@ -98,12 +99,18 @@
   <td>{{ material.categoria?.nome || 'Categoria não definida' }}</td>
   <td>{{ material.origem?.nome || 'Origem não definida' }}</td>
   <td>
+      <a 
+      [href]="material.qrValor" 
+      target="_blank" 
+      (click)="$event.stopPropagation()"
+      >
     <div 
       [id]="'qr-' + material.id" 
-      style="width: 60px; height: 60px;"
-      (click)="$event.stopPropagation()"
+      style="width: 90px; height: 90px;"
     ></div>
-  </td>
+  </a>
+</td>
+
   <td>
     <p-button 
       icon="pi pi-pencil" 

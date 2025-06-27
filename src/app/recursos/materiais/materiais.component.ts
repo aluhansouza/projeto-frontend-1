@@ -483,8 +483,8 @@ export class MateriaisComponent implements OnInit {
 
   gerarQrCode(id: number, valor: string): void {
     const qr = new QRCodeStyling({
-      width: 60,
-      height: 60,
+      width: 90,
+      height: 90,
       data: valor,
       margin: 0,
       dotsOptions: { color: "#000", type: "extra-rounded" },
@@ -499,13 +499,16 @@ export class MateriaisComponent implements OnInit {
 
     // Garantir que o QR seja renderizado
     const canvasId = `qr-${id}`;
-    setTimeout(() => {
-      const canvasEl = document.getElementById(canvasId);
-      if (canvasEl) {
-        canvasEl.innerHTML = '';
-        qr.append(canvasEl);
-      }
-    });
+setTimeout(() => {
+  const canvas = container?.querySelector('canvas') as HTMLCanvasElement;
+  if (canvas) {
+    canvas.style.margin = '0';
+    canvas.style.padding = '0';
+    canvas.style.display = 'block';
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+  }
+}, 100);
   }
 
 
@@ -514,7 +517,7 @@ export class MateriaisComponent implements OnInit {
       width: 150,
       height: 150,
       data: valor,
-      margin: 1,
+      margin: 0,
       dotsOptions: { color: "#000", type: "rounded" },
       backgroundOptions: { color: "#fff" }
     });

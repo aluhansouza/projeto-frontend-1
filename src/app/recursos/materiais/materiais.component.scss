@@ -219,3 +219,14 @@ form.p-fluid .p-select {
   border-color: var(--primary-color) !important;
   box-shadow: 0 0 0 0.15rem rgba(32, 113, 195, 0.5);
 }
+
+
+// Em materiais.component.scss
+[id^="qr-"] {
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
