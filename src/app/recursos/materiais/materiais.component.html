@@ -106,11 +106,12 @@
   <td>{{ material.categoria?.nome || 'Categoria não definida' }}</td>
   <td>{{ material.origem?.nome || 'Origem não definida' }}</td>
   <td>
-     <div 
-  [id]="'qr-' + material.id" 
-  style="width: 90px; height: 90px; cursor: zoom-in;" 
-  (click)="abrirQrCodeGrande(material.qrValor || material.nome); $event.stopPropagation()"
-></div>
+  <div 
+  id="qr-{{material.id}}" 
+  style="width: 90px; height: 90px; cursor: pointer" 
+  (click)="abrirQrCodeGrande(material.qrValor || material.nome)">
+</div>
+
 
 </td>
 
@@ -521,14 +522,12 @@
 
 
 <p-dialog 
-  header="QR Code Ampliado" 
   [(visible)]="qrDialogVisible" 
   [modal]="true" 
-  [dismissableMask]="true"
->
-  <div 
-    id="qr-ampliado" 
-    style="width: 200px; height: 200px; margin: auto;">
-  </div>
+  header="QR Code" 
+  [style]="{width: '650px'}">
+  
+  <div id="qr-ampliado" style="margin: auto; width: 600px; height: 600px"></div>
 </p-dialog>
+
 

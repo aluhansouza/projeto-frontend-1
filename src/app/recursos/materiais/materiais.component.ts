@@ -488,21 +488,42 @@ export class MateriaisComponent implements OnInit {
 
   // ----- QR Code -----
 
-  gerarQrCode(id: number, valor: string): void {
-    const qr = new QRCodeStyling({
-      width: 90,
-      height: 90,
-      data: valor,
-      margin: 0,
-      dotsOptions: { color: "#000", type: "extra-rounded" },
-      backgroundOptions: { color: "#fff" }
-    });
+ gerarQrCode(id: number, valor: string): void {
+  const qr = new QRCodeStyling({
+    width: 90,
+    height: 90,
+    data: valor,
+    margin: 0,
+    dotsOptions: { color: "#000", type: "extra-rounded" },
+    backgroundOptions: { color: "#fff" },
 
-    const container = document.getElementById('qr-' + id);
-    if (container) {
-      container.innerHTML = '';
-      qr.append(container);
+    // Adiciona a logo do assets
+    image: 'assets/image/logo.png',    // caminho relativo ao index.html do Angular
+    imageOptions: {
+      crossOrigin: 'anonymous',
+      margin: 0,
+      imageSize: 0.50  // 25% do tamanho do QR Code
     }
+  });
+
+  const container = document.getElementById('qr-' + id);
+  if (container) {
+    container.innerHTML = '';
+    qr.append(container);
+  }
+
+  // Ajuste do estilo do canvas para ficar bonitinho
+  setTimeout(() => {
+    const canvas = container?.querySelector('canvas') as HTMLCanvasElement;
+    if (canvas) {
+      canvas.style.margin = '0';
+      canvas.style.padding = '0';
+      canvas.style.display = 'block';
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
+    }
+  }, 100);
+
 
     // Garantir que o QR seja renderizado
     const canvasId = `qr-${id}`;
@@ -652,17 +673,34 @@ abrirQrCodeGrande(valor: string): void {
     if (container) {
       container.innerHTML = '';
       const qr = new QRCodeStyling({
-        width: 200,
-        height: 200,
+        width: 600,
+        height: 600,
         data: valor,
         margin: 0,
         dotsOptions: { color: "#000", type: "rounded" },
-        backgroundOptions: { color: "#fff" }
+        backgroundOptions: { color: "#fff" },
+
+        image: 'assets/image/logo.png',  // logo do assets
+        imageOptions: {
+          crossOrigin: 'anonymous',
+          margin: 0,
+          imageSize: 0.5  // tamanho proporcional da logo
+        }
       });
       qr.append(container);
     }
   }, 0);
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
