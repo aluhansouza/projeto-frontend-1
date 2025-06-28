@@ -609,9 +609,76 @@ setTimeout(() => {
     table.filterGlobal(input, 'contains');
   }
 
-  exportCSV() {
-    // Implementar exportação se necessário
-  }
+exportCSV(): void {
+  if (!this.materiais.length) return;
+
+  const header = [
+    'ID',
+    'Nome',
+    'Descrição',
+    'Setor',
+    'Categoria',
+    'Origem',
+    'Situação',
+    'Patrimônio',
+    'Valor Compra (R$)',
+    'Valor Atual (R$)',
+    'Valor Depreciado (R$)',
+    'Percentual Depreciado (%)',
+    'Tipo Depreciação',
+    'Percentual Depreciação (%)',
+    'Vida Útil (anos)',
+    'Identificação Recibo',
+    'Localização Física',
+    'Data Aquisição',
+    'Imagem URL',
+    'QR Code'
+  ];
+
+  const rows = this.materiais.map(m => {
+    const valorCompra = m.valorCompra ?? 0;
+    const valorAtual = m.valorAtual ?? 0;
+    const percentualDepreciacao = m.percentualDepreciacao ?? 0;
+    const valorDepreciado = valorCompra - valorAtual;
+    const percentualDepreciado = valorCompra
+      ? ((valorDepreciado / valorCompra) * 100).toFixed(2)
+      : '0.00';
+
+    return [
+      m.id ?? '',
+      `"${m.nome ?? ''}"`,
+      `"${m.descricao ?? ''}"`,
+      `"${this.getNomeSetor(m.setorId)}"`,
+      `"${this.getNomeCategoria(m.categoriaId)}"`,
+      `"${this.getNomeOrigem(m.origemId)}"`,
+      `"${this.getLabelSituacao(m.situacao)}"`,
+      `"${m.patrimonio ?? ''}"`,
+      valorCompra.toFixed(2),
+      valorAtual.toFixed(2),
+      valorDepreciado.toFixed(2),
+      percentualDepreciado,
+      `"${m.tipoDepreciacao ?? ''}"`,
+      percentualDepreciacao.toFixed(2),
+      m.vidaUtilAnos ?? '',
+      `"${m.identificacaoRecibo ?? ''}"`,
+      `"${m.localizacaoFisica ?? ''}"`,
+      m.dataAquisicao ? new Date(m.dataAquisicao).toLocaleDateString('pt-BR') : '',
+      `"${m.imagemUrl ?? ''}"`,
+      `"${m.qrValor ?? ''}"`
+    ];
+  });
+
+  const csvContent = '\uFEFF' + [header.join(';'), ...rows.map(e => e.join(';'))].join('\n');
+
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'materiais.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 
 
 situacaoToSeverity(situacao?: Situacao): 'success' | 'warn' | 'danger' | 'info' {
