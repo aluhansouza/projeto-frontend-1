@@ -141,6 +141,13 @@ export class MateriaisComponent implements OnInit {
 
   imagemSelecionada: File | null = null;
 
+  imagemDialogVisible = false;
+  imagemSelecionadaUrl: string = '';
+
+  qrDialogVisible = false;
+  qrValorSelecionado: string = '';
+
+
 
   // ----- Constructor -----
 
@@ -631,6 +638,31 @@ getLabelSituacao(situacao?: Situacao): string {
   return situacaoEncontrada ? situacaoEncontrada.label : '-';
 }
 
+abrirImagemGrande(url: string): void {
+  this.imagemSelecionadaUrl = url;
+  this.imagemDialogVisible = true;
+}
+
+abrirQrCodeGrande(valor: string): void {
+  this.qrValorSelecionado = valor;
+  this.qrDialogVisible = true;
+
+  setTimeout(() => {
+    const container = document.getElementById('qr-ampliado');
+    if (container) {
+      container.innerHTML = '';
+      const qr = new QRCodeStyling({
+        width: 200,
+        height: 200,
+        data: valor,
+        margin: 0,
+        dotsOptions: { color: "#000", type: "rounded" },
+        backgroundOptions: { color: "#fff" }
+      });
+      qr.append(container);
+    }
+  }, 0);
+}
 
 
 

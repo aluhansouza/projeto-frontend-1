@@ -80,12 +80,19 @@
   </ng-template>
 
   <ng-template #body let-material>
-    <tr (click)="abrirVisualizarMaterial(material)" style="cursor: pointer;">
+  <tr>
   <td><p-tableCheckbox [value]="material" (click)="$event.stopPropagation()"/></td>
   <td>{{ material.id }}</td>
   <td>{{ material.nome }}</td>
   <td>
-    <img [src]="material.imagemUrl" alt="Imagem do material" width="100" />
+    <img 
+  [src]="material.imagemUrl" 
+  alt="Imagem" 
+  width="100" 
+  style="cursor: zoom-in"
+  (click)="abrirImagemGrande(material.imagemUrl); $event.stopPropagation()" 
+/>
+
     <!-- <img src="../../../assets/image/tv.jpg" alt="image"> -->
   </td>
   <td>
@@ -99,35 +106,40 @@
   <td>{{ material.categoria?.nome || 'Categoria não definida' }}</td>
   <td>{{ material.origem?.nome || 'Origem não definida' }}</td>
   <td>
-      <a 
-      [href]="material.qrValor" 
-      target="_blank" 
-      (click)="$event.stopPropagation()"
-      >
-    <div 
-      [id]="'qr-' + material.id" 
-      style="width: 90px; height: 90px;"
-    ></div>
-  </a>
+     <div 
+  [id]="'qr-' + material.id" 
+  style="width: 90px; height: 90px; cursor: zoom-in;" 
+  (click)="abrirQrCodeGrande(material.qrValor || material.nome); $event.stopPropagation()"
+></div>
+
 </td>
 
-  <td>
-    <p-button 
-      icon="pi pi-pencil" 
-      class="mr-2" 
-      (click)="editarMaterial(material); $event.stopPropagation()" 
-      [rounded]="true" 
-      [outlined]="true" 
-      severity="secondary" 
-    />
-    <p-button 
-      icon="pi pi-trash" 
-      (click)="deletarMaterial(material.id!); $event.stopPropagation()" 
-      [rounded]="true" 
-      [outlined]="true" 
-      severity="danger" 
-    />
-  </td>
+<td>
+  <p-button 
+    icon="pi pi-eye" 
+    class="mr-2" 
+    (click)="abrirVisualizarMaterial(material); $event.stopPropagation()" 
+    [rounded]="true" 
+    [outlined]="true" 
+    severity="info"
+  />
+  <p-button 
+    icon="pi pi-pencil" 
+    class="mr-2" 
+    (click)="editarMaterial(material); $event.stopPropagation()" 
+    [rounded]="true" 
+    [outlined]="true" 
+    severity="secondary" 
+  />
+  <p-button 
+    icon="pi pi-trash" 
+    (click)="deletarMaterial(material.id!); $event.stopPropagation()" 
+    [rounded]="true" 
+    [outlined]="true" 
+    severity="danger" 
+  />
+</td>
+
 </tr>
   </ng-template>
 
@@ -493,3 +505,30 @@
 
 <!-- DIALOG DE CONFIRMAÇÃO -->
 <p-confirmdialog [style]="{ width: '500px' }"></p-confirmdialog>
+
+<p-dialog 
+  header="Imagem em Tamanho Real" 
+  [(visible)]="imagemDialogVisible" 
+  [modal]="true" 
+  [dismissableMask]="true"
+>
+  <img 
+    [src]="imagemSelecionadaUrl" 
+    alt="Imagem ampliada" 
+    style="max-width: 100%; max-height: 70vh; display: block; margin: auto;" 
+  />
+</p-dialog>
+
+
+<p-dialog 
+  header="QR Code Ampliado" 
+  [(visible)]="qrDialogVisible" 
+  [modal]="true" 
+  [dismissableMask]="true"
+>
+  <div 
+    id="qr-ampliado" 
+    style="width: 200px; height: 200px; margin: auto;">
+  </div>
+</p-dialog>
+
