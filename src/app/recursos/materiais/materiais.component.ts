@@ -139,14 +139,17 @@ export class MateriaisComponent implements OnInit {
   loadingExcluir = false;
   loadingExcluirMassa = false;
 
+  dragOver = false;
+
   imagemSelecionada: File | null = null;
+  imagemPreview: string | ArrayBuffer | null = null;
+
 
   imagemDialogVisible = false;
   imagemSelecionadaUrl: string = '';
 
   qrDialogVisible = false;
   qrValorSelecionado: string = '';
-
 
 
   // ----- Constructor -----
@@ -301,22 +304,31 @@ export class MateriaisComponent implements OnInit {
   }
 
 
-  novoMaterial(): void {
-    this.material = this.criarMaterialVazio();
-    this.isEditando = false;
-    this.submitted = false;
-    this.materialDialog = true;
-  }
+novoMaterial(): void {
+  this.material = this.criarMaterialVazio();
+  this.isEditando = false;
+  this.submitted = false;
+  this.imagemPreview = null;  // limpar preview
+  this.imagemSelecionada = null;  // limpar arquivo selecionado
+  this.materialDialog = true;
+}
 
 
-  editarMaterial(material: MaterialResponseDTO): void {
-    this.material = toMaterialRequestDTO(material);
-    this.material.id = material.id;
 
-    this.isEditando = true;
-    this.submitted = false;
-    this.materialDialog = true;
-  }
+editarMaterial(material: MaterialResponseDTO): void {
+  this.material = toMaterialRequestDTO(material);
+  this.material.id = material.id;
+
+  this.isEditando = true;
+  this.submitted = false;
+  this.imagemSelecionada = null; // não tem nova imagem ainda
+
+  // Define o preview com a URL da imagem atual (se existir)
+  this.imagemPreview = material.imagemUrl || null;
+
+  this.materialDialog = true;
+}
+
 
 
   salvarMaterial(): void {
@@ -540,22 +552,29 @@ setTimeout(() => {
   }
 
 
-  gerarQrCodeVisualizar(id: number, valor: string): void {
-    const qr = new QRCodeStyling({
-      width: 150,
-      height: 150,
-      data: valor,
+gerarQrCodeVisualizar(id: number, valor: string): void {
+  const qr = new QRCodeStyling({
+    width: 150,
+    height: 150,
+    data: valor,
+    margin: 0,
+    dotsOptions: { color: "#000", type: "extra-rounded" },
+    backgroundOptions: { color: "#fff" },
+    image: 'assets/image/logo.png',
+    imageOptions: {
+      crossOrigin: 'anonymous',
       margin: 0,
-      dotsOptions: { color: "#000", type: "rounded" },
-      backgroundOptions: { color: "#fff" }
-    });
-
-    const container = document.getElementById('qr-visualizar');
-    if (container) {
-      container.innerHTML = '';
-      qr.append(container);
+      imageSize: 0.50
     }
+  });
+
+  const container = document.getElementById('qr-visualizar');
+  if (container) {
+    container.innerHTML = '';
+    qr.append(container);
   }
+}
+
 
 
   // ----- Abertura de dialogs -----
@@ -761,6 +780,50 @@ abrirQrCodeGrande(valor: string): void {
 
 
 
+ // Evento disparado quando arrastam um arquivo sobre a área
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    this.dragOver = true;
+  }
+
+  // Evento disparado quando o arquivo sai da área de drag
+  onDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    this.dragOver = false;
+  }
+
+  // Evento disparado ao soltar o arquivo na área
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    this.dragOver = false;
+
+    if (event.dataTransfer?.files && event.dataTransfer.files.length > 0) {
+      const file = event.dataTransfer.files[0];
+      this.processarArquivoSelecionado(file);
+      event.dataTransfer.clearData();
+    }
+  }
+
+  // Evento disparado ao selecionar arquivo via input (change)
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.processarArquivoSelecionado(input.files[0]);
+    }
+  }
+
+  // Método interno para processar o arquivo selecionado
+private processarArquivoSelecionado(file: File): void { 
+  this.imagemSelecionada = file;
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    this.imagemPreview = reader.result;
+  };
+  reader.readAsDataURL(file);
+
+  console.log('Arquivo selecionado:', file);
+}
 
 
 

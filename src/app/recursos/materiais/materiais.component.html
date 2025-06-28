@@ -150,107 +150,112 @@
   header="Visualizar Material" 
   [(visible)]="materialVisualizarDialog" 
   [modal]="true" 
-  [style]="{ width: '900px', height: 'auto' }" 
+  [style]="{ width: '1200px', height: 'auto' }" 
   [closeOnEscape]="true" 
   (onHide)="materialVisualizarDialog = false"
   [dismissableMask]="true"
 >
-  <div class="flex flex-col gap-6">
-    <div class="campo-duplo">
-      <!-- Nome (readonly) -->
-      <div class="campo">
-        <label>Nome</label>
-        <input type="text" pInputText [value]="material.nome" readonly class="w-full" />
-      </div>
+  <div style="display: flex; height: 100%; gap: 1.5rem;">
 
-      <!-- Patrimônio (readonly) -->
-      <div class="campo">
-        <label>Patrimônio</label>
-        <input type="text" pInputText [value]="material.patrimonio" readonly class="w-full" />
-      </div>
-    </div>
-
-   <div class="campo">
-  <label>Situação</label>
-  <p-select 
-    [options]="situacoes" 
-    [ngModel]="material.situacao" 
-    optionLabel="label" 
-    optionValue="value"
-    [disabled]="true"
-    class="w-full"
-  >
-  </p-select>
-</div>
-
-
-    <div class="campo-triplo">
-      <!-- Setor (readonly) -->
-      <div class="campo">
-        <label>Setor</label>
-        <input type="text" pInputText [value]="getNomeSetor(material.setorId)" readonly class="w-full" />
-      </div>
-
-      <!-- Categoria (readonly) -->
-      <div class="campo">
-        <label>Categoria</label>
-        <input type="text" pInputText [value]="getNomeCategoria(material.categoriaId)" readonly class="w-full" />
-      </div>
-
-      <!-- Origem (readonly) -->
-      <div class="campo">
-        <label>Origem</label>
-        <input type="text" pInputText [value]="getNomeOrigem(material.origemId)" readonly class="w-full" />
-      </div>
-    </div>
-
-    <div class="campo">
-      <label>Localização Física</label>
-      <input type="text" pInputText [value]="material.localizacaoFisica" readonly class="w-full" />
-    </div>
-
-    <div class="campo">
-      <label>Descrição</label>
-      <textarea pInputTextarea [value]="material.descricao" rows="3" readonly class="w-full"></textarea>
-    </div>
-
-    <div class="campo">
-      <label>Identificação do Recibo</label>
-      <input type="text" pInputText [value]="material.identificacaoRecibo" readonly class="w-full" />
-    </div>
-
-    <div class="campo-triplo">
-      <div class="campo">
-        <label>Tipo de Depreciação</label>
-        <input type="text" pInputText [value]="material.tipoDepreciacao" readonly class="w-full" />
+    <!-- COLUNA ESQUERDA: FORMULÁRIO SOMENTE LEITURA -->
+    <div style="flex: 1; overflow-y: auto; padding-right: 1rem;">
+      <div class="campo-duplo">
+        <div class="campo">
+          <label class="label-visualizar">Nome</label>
+          <input type="text" pInputText [value]="material.nome" readonly class="w-full" />
+        </div>
+        <div class="campo">
+          <label class="label-visualizar">Patrimônio</label>
+          <input type="text" pInputText [value]="material.patrimonio" readonly class="w-full" />
+        </div>
       </div>
 
       <div class="campo">
-        <label>Depreciação (%)</label>
-        <input type="text" pInputText [value]="material.percentualDepreciacao" readonly class="w-full" />
+        <label class="label-visualizar">Situação</label>
+        <p-select 
+          [options]="situacoes" 
+          [ngModel]="material.situacao" 
+          optionLabel="label" 
+          optionValue="value"
+          [disabled]="true"
+          class="w-full"
+        ></p-select>
+      </div>
+
+      <div class="campo-triplo">
+        <div class="campo">
+          <label class="label-visualizar">Setor</label>
+          <input type="text" pInputText [value]="getNomeSetor(material.setorId)" readonly class="w-full" />
+        </div>
+        <div class="campo">
+          <label class="label-visualizar">Categoria</label>
+          <input type="text" pInputText [value]="getNomeCategoria(material.categoriaId)" readonly class="w-full" />
+        </div>
+        <div class="campo">
+          <label class="label-visualizar">Origem</label>
+          <input type="text" pInputText [value]="getNomeOrigem(material.origemId)" readonly class="w-full" />
+        </div>
       </div>
 
       <div class="campo">
-        <label>Valor Compra (R$)</label>
-        <input type="text" pInputText [value]="material.valorCompra | currency:'BRL':'symbol'" readonly class="w-full" />
+        <label class="label-visualizar">Localização Física</label>
+        <input type="text" pInputText [value]="material.localizacaoFisica" readonly class="w-full" />
+      </div>
+
+      <div class="campo">
+        <label class="label-visualizar">Descrição</label>
+        <textarea pInputTextarea [value]="material.descricao" rows="3" readonly class="w-full"></textarea>
+      </div>
+
+      <div class="campo">
+        <label class="label-visualizar">Identificação do Recibo</label>
+        <input type="text" pInputText [value]="material.identificacaoRecibo" readonly class="w-full" />
+      </div>
+
+      <div class="campo-triplo">
+        <div class="campo">
+          <label class="label-visualizar">Tipo de Depreciação</label>
+          <input type="text" pInputText [value]="material.tipoDepreciacao" readonly class="w-full" />
+        </div>
+        <div class="campo">
+          <label class="label-visualizar">Depreciação (%)</label>
+          <input type="text" pInputText [value]="material.percentualDepreciacao" readonly class="w-full" />
+        </div>
+        <div class="campo">
+          <label class="label-visualizar">Valor Compra (R$)</label>
+          <input type="text" pInputText [value]="material.valorCompra | currency:'BRL':'symbol'" readonly class="w-full" />
+        </div>
+      </div>
+
+      <div class="campo">
+        <label class="label-visualizar">Data de Aquisição</label>
+        <input type="text" pInputText [value]="material.dataAquisicao | date:'dd/MM/yyyy'" readonly class="w-full" />
       </div>
     </div>
 
-    <div class="campo">
-      <label>Data de Aquisição</label>
-      <input type="text" pInputText [value]="material.dataAquisicao | date:'dd/MM/yyyy'" readonly class="w-full" />
-    </div>
+    <!-- COLUNA DIREITA: IMAGEM EM CIMA, QR EMBAIXO -->
+    <div style="width: 400px; display: flex; flex-direction: column; justify-content: space-between;">
+      
+      <!-- Imagem centralizada -->
+      <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+        <img 
+          *ngIf="material.imagemUrl"
+          [src]="material.imagemUrl" 
+          alt="Imagem do Material" 
+          style="max-width: 100%; max-height: 250px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); object-fit: contain;" 
+        />
+      </div>
 
-    <div class="p-field p-col-12" style="text-align:center; margin-top:1rem;">
-      <div id="qr-visualizar" style="width: 120px; height: 120px; margin: 0 auto;"></div>
+      <!-- QR Code centralizado -->
+      <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+        <div id="qr-visualizar" style="width: 150px; height: 150px;"></div>
+      </div>
     </div>
   </div>
 
-  <p-footer>
-    <button pButton type="button" label="Fechar" icon="pi pi-times" 
-      (click)="materialVisualizarDialog = false" class="p-button-text"></button>
-  </p-footer>
 </p-dialog>
+
+
 
 
 
@@ -259,7 +264,7 @@
 <!-- MODAL DE CADASTRO/EDIÇÃO -->
 <p-dialog 
   [(visible)]="materialDialog" 
-  [style]="{ width: '900px', height: 'auto' }" 
+  [style]="{ width: '1100px', height: 'auto' }" 
   header="Detalhes do Material" 
   [modal]="true">
 
@@ -272,237 +277,267 @@
     aria-label="Salvando...">
   </p-progressSpinner>
 
-  <div class="flex flex-col gap-6" *ngIf="!loadingSalvar">
-    <div class="campo-duplo">
-      <!-- Nome -->
+  <div *ngIf="!loadingSalvar" style="display: flex; gap: 1.5rem;">
+
+    <!-- COLUNA ESQUERDA: FORMULÁRIO (flex-grow para ocupar espaço disponível) -->
+    <div style="flex: 1 1 auto; min-width: 0; max-width: 700px;">
+      <div class="campo-duplo">
+        <!-- Nome -->
+        <div class="campo">
+          <label for="nome" class="block font-bold mb-2">Nome</label>
+          <input 
+            type="text" 
+            pInputText 
+            id="nome" 
+            [(ngModel)]="material.nome" 
+            required 
+            autofocus 
+            class="w-full" 
+          />
+          <small class="text-red-500" *ngIf="submitted && !material.nome">Nome é obrigatório.</small>
+        </div>
+
+        <!-- Patrimônio -->
+        <div class="campo">
+          <label for="patrimonio" class="block font-bold mb-2">Patrimônio</label>
+          <input 
+            type="text" 
+            pInputText 
+            id="patrimonio" 
+            [(ngModel)]="material.patrimonio" 
+            required 
+            class="w-full" 
+            (keypress)="onPatrimonioKeyPress($event)"
+          />
+          <small class="text-red-500" *ngIf="submitted && !material.patrimonio">Patrimônio é obrigatório.</small>
+        </div>
+      </div>
+
+      <!-- (aqui todo o resto dos campos do formulário, exatamente igual ao que você já tem, só tirando a div upload-area) -->
+
+      <!-- Situação -->
       <div class="campo">
-        <label for="nome" class="block font-bold mb-2">Nome</label>
+        <label for="situacao" class="block font-bold mb-2">Situação</label>
+        <p-select 
+          id="situacao" 
+          [options]="situacoes" 
+          [(ngModel)]="material.situacao" 
+          placeholder="Selecione uma situação" 
+          class="w-full" 
+          optionLabel="label" 
+          optionValue="value">
+        </p-select>
+        <small class="text-red-500" *ngIf="submitted && !material.situacao">Situação é obrigatória.</small>
+      </div>
+
+      <!-- Setor, Categoria, Origem -->
+      <div class="campo-triplo">
+        <!-- Setor -->
+        <div class="campo">
+          <label for="setor" class="block font-bold mb-2">Setor</label>
+          <p-select
+            id="setor" 
+            [options]="setores" 
+            [(ngModel)]="material.setorId" 
+            optionLabel="nome" 
+            optionValue="id" 
+            placeholder="Selecione um setor" 
+            class="w-full">
+          </p-select>
+          <small class="text-red-500" *ngIf="submitted && !material.setorId">Setor é obrigatório.</small>
+        </div>
+
+        <!-- Categoria -->
+        <div class="campo">
+          <label for="categoria" class="block font-bold mb-2">Categoria</label>
+          <p-select 
+            id="categoria" 
+            [options]="categorias" 
+            [(ngModel)]="material.categoriaId" 
+            optionLabel="nome" 
+            optionValue="id" 
+            placeholder="Selecione uma categoria" 
+            class="w-full">
+          </p-select>
+          <small class="text-red-500" *ngIf="submitted && !material.categoriaId">Categoria é obrigatória.</small>
+        </div>
+
+        <!-- Origem -->
+        <div class="campo">
+          <label for="origem" class="block font-bold mb-2">Origem</label>
+          <p-select 
+            id="origem" 
+            [options]="origens" 
+            [(ngModel)]="material.origemId" 
+            optionLabel="nome" 
+            optionValue="id" 
+            placeholder="Selecione uma origem" 
+            class="w-full">
+          </p-select>
+          <small class="text-red-500" *ngIf="submitted && !material.origemId">Origem é obrigatória.</small>
+        </div>
+      </div>
+
+      <!-- Localização Física -->
+      <div class="campo">
+        <label for="localizacao_fisica" class="block font-bold mb-2">Localização Física</label>
         <input 
           type="text" 
           pInputText 
-          id="nome" 
-          [(ngModel)]="material.nome" 
-          required 
-          autofocus 
+          id="localizacao_fisica" 
+          [(ngModel)]="material.localizacaoFisica" 
           class="w-full" 
         />
-        <small class="text-red-500" *ngIf="submitted && !material.nome">Nome é obrigatório.</small>
       </div>
 
-      <!-- Patrimônio -->
+      <!-- Descrição -->
       <div class="campo">
-        <label for="patrimonio" class="block font-bold mb-2">Patrimônio</label>
+        <label for="descricao" class="block font-bold mb-2">Descrição</label>
+        <textarea 
+          pInputTextarea 
+          id="descricao" 
+          [(ngModel)]="material.descricao" 
+          rows="3" 
+          class="w-full">
+        </textarea>
+      </div>
+
+      <!-- Identificação do Recibo -->
+      <div class="campo">
+        <label for="identificacao_recibo" class="block font-bold mb-2">Identificação do Recibo</label>
         <input 
           type="text" 
           pInputText 
-          id="patrimonio" 
-          [(ngModel)]="material.patrimonio" 
-          required 
+          id="identificacao_recibo" 
+          [(ngModel)]="material.identificacaoRecibo" 
           class="w-full" 
-          (keypress)="onPatrimonioKeyPress($event)"
-        />
-        <small class="text-red-500" *ngIf="submitted && !material.patrimonio">Patrimônio é obrigatório.</small>
-      </div>
-    </div>
-
-    <!-- Situação -->
-    <div class="campo">
-      <label for="situacao" class="block font-bold mb-2">Situação</label>
-      <p-select 
-        id="situacao" 
-        [options]="situacoes" 
-        [(ngModel)]="material.situacao" 
-        placeholder="Selecione uma situação" 
-        class="w-full" 
-        optionLabel="label" 
-        optionValue="value">
-      </p-select>
-      <small class="text-red-500" *ngIf="submitted && !material.situacao">Situação é obrigatória.</small>
-    </div>
-
-    <!-- Setor, Categoria, Origem -->
-    <div class="campo-triplo">
-      <!-- Setor -->
-      <div class="campo">
-        <label for="setor" class="block font-bold mb-2">Setor</label>
-        <p-select
-          id="setor" 
-          [options]="setores" 
-          [(ngModel)]="material.setorId" 
-          optionLabel="nome" 
-          optionValue="id" 
-          placeholder="Selecione um setor" 
-          class="w-full">
-        </p-select>
-        <small class="text-red-500" *ngIf="submitted && !material.setorId">Setor é obrigatório.</small>
-      </div>
-
-      <!-- Categoria -->
-      <div class="campo">
-        <label for="categoria" class="block font-bold mb-2">Categoria</label>
-        <p-select 
-          id="categoria" 
-          [options]="categorias" 
-          [(ngModel)]="material.categoriaId" 
-          optionLabel="nome" 
-          optionValue="id" 
-          placeholder="Selecione uma categoria" 
-          class="w-full">
-        </p-select>
-        <small class="text-red-500" *ngIf="submitted && !material.categoriaId">Categoria é obrigatória.</small>
-      </div>
-
-      <!-- Origem -->
-      <div class="campo">
-        <label for="origem" class="block font-bold mb-2">Origem</label>
-        <p-select 
-          id="origem" 
-          [options]="origens" 
-          [(ngModel)]="material.origemId" 
-          optionLabel="nome" 
-          optionValue="id" 
-          placeholder="Selecione uma origem" 
-          class="w-full">
-        </p-select>
-        <small class="text-red-500" *ngIf="submitted && !material.origemId">Origem é obrigatória.</small>
-      </div>
-    </div>
-
-    <!-- Localização Física -->
-    <div class="campo">
-      <label for="localizacao_fisica" class="block font-bold mb-2">Localização Física</label>
-      <input 
-        type="text" 
-        pInputText 
-        id="localizacao_fisica" 
-        [(ngModel)]="material.localizacaoFisica" 
-        class="w-full" 
-      />
-    </div>
-
-    <!-- Descrição -->
-    <div class="campo">
-      <label for="descricao" class="block font-bold mb-2">Descrição</label>
-      <textarea 
-        pInputTextarea 
-        id="descricao" 
-        [(ngModel)]="material.descricao" 
-        rows="3" 
-        class="w-full">
-      </textarea>
-    </div>
-
-    <!-- Identificação do Recibo -->
-    <div class="campo">
-      <label for="identificacao_recibo" class="block font-bold mb-2">Identificação do Recibo</label>
-      <input 
-        type="text" 
-        pInputText 
-        id="identificacao_recibo" 
-        [(ngModel)]="material.identificacaoRecibo" 
-        class="w-full" 
-        (keypress)="onReciboKeyPress($event)"
-      />
-    </div>
-
-    <!-- Tipo de Depreciação e Percentual -->
-    <div class="campo-triplo">
-      <!-- Tipo de Depreciação -->
-      <div class="campo">
-        <label for="tipo_depreciacao" class="block font-bold mb-2">Tipo de Depreciação</label>
-        <p-select 
-          id="tipo_depreciacao"
-          [options]="[
-            { label: 'Linear', value: 'LINEAR' },
-            { label: 'Acelerada', value: 'ACELERADA' }
-          ]"
-          [(ngModel)]="material.tipoDepreciacao"
-          placeholder="Selecione o tipo"
-          class="w-full">
-        </p-select>
-      </div>
-
-      <!-- Percentual de Depreciação -->
-      <div class="campo">
-        <label for="percentual_depreciacao" class="block font-bold mb-2">Depreciação (%)</label>
-        <p-inputNumber
-          id="percentual_depreciacao"
-          [(ngModel)]="material.percentualDepreciacao"
-          mode="decimal"
-          min="0"
-          max="100"
-          step="0.1"
-          suffix="%"
-          [useGrouping]="false"
-          class="w-full input-igual">
-        </p-inputNumber>
-      </div>
-
-      <!-- Valor Compra -->
-      <div class="campo">
-        <label for="valorCompra" class="block font-bold mb-2">Valor Compra (R$)</label>
-        <input 
-          type="number" 
-          pInputText 
-          id="valorCompra" 
-          [(ngModel)]="material.valorCompra" 
-          min="0" 
-          step="0.01" 
-          class="w-full" 
-          placeholder="0,00"
+          (keypress)="onReciboKeyPress($event)"
         />
       </div>
+
+      <!-- Tipo de Depreciação e Percentual -->
+      <div class="campo-triplo">
+        <!-- Tipo de Depreciação -->
+        <div class="campo">
+          <label for="tipo_depreciacao" class="block font-bold mb-2">Tipo de Depreciação</label>
+          <p-select 
+            id="tipo_depreciacao"
+            [options]="[
+              { label: 'Linear', value: 'LINEAR' },
+              { label: 'Acelerada', value: 'ACELERADA' }
+            ]"
+            [(ngModel)]="material.tipoDepreciacao"
+            placeholder="Selecione o tipo"
+            class="w-full">
+          </p-select>
+        </div>
+
+        <!-- Percentual de Depreciação -->
+        <div class="campo">
+          <label for="percentual_depreciacao" class="block font-bold mb-2">Depreciação (%)</label>
+          <p-inputNumber
+            id="percentual_depreciacao"
+            [(ngModel)]="material.percentualDepreciacao"
+            mode="decimal"
+            min="0"
+            max="100"
+            step="0.1"
+            suffix="%"
+            [useGrouping]="false"
+            class="w-full input-igual">
+          </p-inputNumber>
+        </div>
+
+        <!-- Valor Compra -->
+        <div class="campo">
+          <label for="valorCompra" class="block font-bold mb-2">Valor Compra (R$)</label>
+          <input 
+            type="number" 
+            pInputText 
+            id="valorCompra" 
+            [(ngModel)]="material.valorCompra" 
+            min="0" 
+            step="0.01" 
+            class="w-full" 
+            placeholder="0,00"
+          />
+        </div>
+      </div>
+
+      <!-- Data de Aquisição -->
+      <div class="campo">
+        <label for="dataAquisicao" class="block font-bold mb-2">Data de Aquisição</label>
+        <p-datePicker 
+          id="dataAquisicao"
+          [(ngModel)]="material.dataAquisicao"
+          [showIcon]="true"
+          [locale]="br"
+          [dateFormat]="'dd/mm/yy'"
+          placeholder="Selecione a data"
+          class="w-full campo-grande">
+        </p-datePicker>
+      </div>
     </div>
 
-    <!-- Data de Aquisição -->
-    <div class="campo">
-      <label for="dataAquisicao" class="block font-bold mb-2">Data de Aquisição</label>
-      <p-datePicker 
-        id="dataAquisicao"
-        [(ngModel)]="material.dataAquisicao"
-        [showIcon]="true"
-        [locale]="br"
-        [dateFormat]="'dd/mm/yy'"
-        placeholder="Selecione a data"
-        class="w-full campo-grande">
-      </p-datePicker>
+    <!-- COLUNA DIREITA: ÁREA DE UPLOAD FIXA -->
+    <div style="width: 350px; flex-shrink: 0;">
+      <div
+  class="upload-area"
+  (click)="fileInput.click()"
+  (dragover)="onDragOver($event)"
+  (dragleave)="onDragLeave($event)"
+  (drop)="onDrop($event)"
+  tabindex="0"
+  role="button"
+  aria-label="Clique ou arraste uma imagem para upload"
+  style="border: 2px dashed #ccc; padding: 1rem; cursor: pointer; text-align: center; border-radius: 6px; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column;"
+>
+  <input
+    #fileInput
+    type="file"
+    accept="image/*"
+    style="display: none"
+    (change)="onFileSelected($event)"
+  />
+
+  <ng-container *ngIf="imagemPreview; else semImagem">
+    <img [src]="imagemPreview" alt="Preview da imagem" style="max-width: 100%; max-height: 300px; border-radius: 6px; object-fit: contain; margin-bottom: 0.5rem;" />
+    <small>Clique ou arraste para trocar a imagem</small>
+  </ng-container>
+
+  <ng-template #semImagem>
+    <p style="margin: 0; user-select: none;">
+      Clique ou arraste uma imagem aqui
+    </p>
+  </ng-template>
+</div>
+
     </div>
+
   </div>
 
   <!-- FOOTER -->
   <ng-template #footer>
-    <div class="footer-flex">
-      <div class="footer-right">
-        <p-fileUpload
-          mode="basic"
-          name="imagem"
-          accept="image/*"
-          chooseLabel="Upload Imagem"
-          (onSelect)="onImagemSelecionada($event)"
-          [auto]="true"
-        ></p-fileUpload>
-      </div>
+    <div class="footer-left">
+      <p-button 
+        label="Cancelar" 
+        icon="pi pi-times" 
+        text 
+        (click)="materialDialog = false">
+      </p-button>
 
-      <div class="footer-left">
-        <p-button 
-          label="Cancelar" 
-          icon="pi pi-times" 
-          text 
-          (click)="materialDialog = false">
-        </p-button>
-
-        <p-button
-          label="Salvar"
-          icon="pi pi-check"
-          (click)="salvarMaterial()"
-          [disabled]="loadingSalvar || !formularioValido()"
-          [loading]="loadingSalvar"
-          class="ml-2"
-        ></p-button>
-      </div>
+      <p-button
+        label="Salvar"
+        icon="pi pi-check"
+        (click)="salvarMaterial()"
+        [disabled]="loadingSalvar || !formularioValido()"
+        [loading]="loadingSalvar"
+        class="ml-2"
+      ></p-button>
     </div>
   </ng-template>
 </p-dialog>
+
 
 <!-- DIALOG DE CONFIRMAÇÃO -->
 <p-confirmdialog [style]="{ width: '500px' }"></p-confirmdialog>

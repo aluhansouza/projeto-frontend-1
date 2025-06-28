@@ -19,8 +19,16 @@
 }
 
 /* Padding ajustado para o rótulo */
-.label {
-    padding-top: -30px;
+label {
+  margin-top: 10px; /* 16px, por exemplo */
+  display: block;
+  font-weight: bold;
+}
+
+label.label-visualizar {
+  margin-bottom: 5px; /* 16px, por exemplo */
+  display: block;
+  font-weight: bold;
 }
 
 /* Estilos gerais para inputs, textareas, selects e p-inputnumber */
