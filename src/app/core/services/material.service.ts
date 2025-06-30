@@ -65,11 +65,11 @@ export class MaterialService {
     }
 
       cadastrarComImagem(formData: FormData): Observable<MaterialResponseDTO> {
-    return this.http.post<MaterialResponseDTO>(`${this.apiUrl}/com-imagem`, formData);
+    return this.http.post<MaterialResponseDTO>(`${this.apiUrl}`, formData);
   }
 
   atualizarComImagem(id: number, formData: FormData): Observable<MaterialResponseDTO> {
-    return this.http.put<MaterialResponseDTO>(`${this.apiUrl}/${id}/com-imagem`, formData);
+    return this.http.put<MaterialResponseDTO>(`${this.apiUrl}/${id}`, formData);
  }
 buscarPorId(id: number): Observable<MaterialResponseDTO> {
   return this.http.get<MaterialResponseDTO>(`${this.apiUrl}/${id}`);

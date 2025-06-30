@@ -46,7 +46,10 @@
   [globalFilterFields]="['nome', 'situacao', 'patrimonio', 'setor.nome', 'categoria.nome', 'origem.nome']"
   currentPageReportTemplate="Mostrando de {first} até {last} de {totalRecords} materiais"
   [showCurrentPageReport]="true"
-  [responsiveLayout]="'scroll'">
+  [responsiveLayout]="'scroll'"
+  (onPage)="regenerarQrCodes()"
+  (onSort)="regenerarQrCodes()"
+  (onFilter)="regenerarQrCodes()">
 
   <ng-template #caption>
     <div class="flex items-center justify-between">

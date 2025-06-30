@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 // Bibliotecas externas
 import QRCodeStyling from 'qr-code-styling';
 import { finalize, delay } from 'rxjs';
+import { forkJoin } from 'rxjs';
 
 // Serviços
 import { MaterialService } from '../../core/services/material.service';
@@ -348,16 +349,11 @@ editarMaterial(material: MaterialResponseDTO): void {
     const materialData: MaterialRequestDTO = toMaterialRequestDTO(this.material);
     const formData = new FormData();
 
-    Object.entries(materialData).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
-        formData.append(key, value as string | Blob);
-      }
-    });
+    formData.append('material', new Blob([JSON.stringify(materialData)], { type: 'application/json' }));
 
     if (this.imagemSelecionada) {
-      formData.append('imagem', this.imagemSelecionada);
+    formData.append('imagem', this.imagemSelecionada);
     }
-
     if (this.isEditando) {
       acao = this.materialService.atualizarComImagem(this.material.id!, formData);
     } else {
@@ -445,28 +441,19 @@ editarMaterial(material: MaterialResponseDTO): void {
           .filter((m) => m.id !== undefined)
           .map((m) => this.materialService.excluir(m.id!));
 
-        Promise.all(exclusoes.map((obs) => obs.toPromise()))
-          .then(() => {
-            this.selectedMateriais = [];
-            this.carregarMateriais();
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Sucesso',
-              detail: 'Materiais excluídos com sucesso!',
-              life: 3000
-            });
-          })
-          .catch(() => {
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Erro',
-              detail: 'Erro ao excluir materiais selecionados.',
-              life: 3000
-            });
-          })
-          .finally(() => {
-            this.loadingExcluirMassa = false;
-          });
+        forkJoin(exclusoes).subscribe({
+  next: () => {
+    this.selectedMateriais = [];
+    this.carregarMateriais();
+    this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Materiais excluídos com sucesso!' });
+  },
+  error: () => {
+    this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao excluir materiais.' });
+  },
+  complete: () => {
+    this.loadingExcluirMassa = false;
+  }
+})
       }
     });
   }
@@ -823,6 +810,16 @@ private processarArquivoSelecionado(file: File): void {
   reader.readAsDataURL(file);
 
   console.log('Arquivo selecionado:', file);
+}
+regenerarQrCodes(): void {
+  setTimeout(() => {
+    this.materiais.forEach(mat => {
+      const container = document.getElementById('qr-' + mat.id);
+      if (container && container.children.length === 0) {
+        this.gerarQrCode(mat.id!, mat.qrValor || mat.nome);
+      }
+    });
+  }, 0);
 }
 
 
