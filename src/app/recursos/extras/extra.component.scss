@@ -82,9 +82,18 @@
 .container-tabelas {
   display: flex;
   flex-direction: row;
-  gap: 1rem; /* espaço lateral entre as tabelas */
-  padding: 1.5rem; /* evita colar nas bordas */
+  gap: 2rem; /* espaço entre as colunas */
+  padding: 1.5rem;
+  align-items: flex-start;
 }
+
+.coluna {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* espaço entre as tabelas dentro de cada coluna */
+  flex: 1; /* as duas colunas ocupam o mesmo espaço */
+}
+
 
 /* Estilos para o select quando está em foco */
 ::ng-deep .p-select.p-focus {

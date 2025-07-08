@@ -37,17 +37,7 @@ export class AppMenu {
                         icon: 'pi pi-fw pi-user',
                         items: [
                             {
-                                label: 'Crud',
-                                icon: 'pi pi-fw pi-pencil',
-                                routerLink: ['/paginas/crud']
-                            },
-                            {
-                                label: 'Crud',
-                                icon: 'pi pi-fw pi-pencil',
-                                routerLink: ['/cadastros/crud']
-                            },
-                            {
-                                label: 'Novo Crud',
+                                label: 'Materiais',
                                 icon: 'pi pi-fw pi-pencil',
                                 routerLink: ['recursos/materiais']
                             },
@@ -75,6 +65,16 @@ export class AppMenu {
                                 label: 'Access Denied',
                                 icon: 'pi pi-fw pi-lock',
                                 routerLink: ['/auth/access']
+                            },
+                            {
+                                label: 'Crud',
+                                icon: 'pi pi-fw pi-pencil',
+                                routerLink: ['/paginas/crud']
+                            },
+                            {
+                                label: 'Crud',
+                                icon: 'pi pi-fw pi-pencil',
+                                routerLink: ['/cadastros/crud']
                             }
                         ]
                     },                

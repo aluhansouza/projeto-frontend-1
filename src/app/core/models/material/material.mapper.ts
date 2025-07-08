@@ -11,6 +11,7 @@ export function toMaterialRequestDTO(material: MaterialResponseDTO): MaterialReq
     imagem_url: material.imagemUrl,
     categoriaId: material.categoriaId ?? 0,
     setorId: material.setorId ?? 0,
+    marcaId: material.marcaId ?? 0,
     origemId: material.origemId ?? 0,
     localizacaoFisica: material.localizacaoFisica ?? '',
     dataAquisicao: material.dataAquisicao ?? '',

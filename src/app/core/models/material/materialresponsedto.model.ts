@@ -1,6 +1,7 @@
 import { Situacao } from '../enums/situacao.materiais.enum';
 import { TipoDepreciacao } from '../enums/tipo-depreciacao.materiais.enum';
 import { SetorResponseDTO } from '../setor/setorresponsedto.model';
+import { MarcaResponseDTO } from '../marca/marcaresponsedto.model';
 import { CategoriaResponseDTO } from '../categoria/categoriaresponsedto.model';
 import { OrigemResponseDTO } from '../origem/origemresponsedto.model';
 
@@ -12,6 +13,7 @@ export interface MaterialResponseDTO {
   imagemUrl? :string;
   categoriaId?: number;
   setorId?: number;
+  marcaId?: number;
   origemId?: number;
   localizacaoFisica?: string;
   dataAquisicao?: string;
@@ -26,5 +28,6 @@ export interface MaterialResponseDTO {
 
   categoria?: CategoriaResponseDTO;
   setor?: SetorResponseDTO;
+  marca?: MarcaResponseDTO;
   origem?: OrigemResponseDTO;
 }

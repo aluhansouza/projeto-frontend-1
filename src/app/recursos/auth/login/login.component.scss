@@ -1,5 +1,11 @@
 
 .teste2 {
-    color: red;
+    color: blue;
     background-color: antiquewhite;
+}
+
+/* Força a largura do input interno do p-password */
+:host ::ng-deep .p-password input {
+  width: 100% !important;
+  box-sizing: border-box;
 }

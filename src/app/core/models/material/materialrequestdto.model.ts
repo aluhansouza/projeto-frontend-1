@@ -8,6 +8,7 @@ export interface MaterialRequestDTO {
     imagem_url?: string;
     categoriaId: number;
     setorId: number;
+    marcaId: number;
     origemId: number;
     localizacaoFisica?: string;
     dataAquisicao?: string;

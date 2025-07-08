@@ -10,16 +10,45 @@ import { AppFloatingConfigurator } from '../../../layout/component/app.floatingc
 
 @Component({
   selector: 'app-login',
-  imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator],
+  standalone: true,
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.scss',
+  imports: [
+    FormsModule,
+    RouterModule,
+    ButtonModule,
+    CheckboxModule,
+    InputTextModule,
+    PasswordModule,
+    RippleModule,
+    AppFloatingConfigurator
+  ]
 })
 export class LoginComponent {
 
-  email: string = '';
+  login: string = ''; // Agora é genérico: pode ser e-mail ou nome de usuário
+  password: string = '';
+  rememberMe: boolean = false;
+  submitted: boolean = false;
 
-    password: string = '';
+  constructor() {}
 
-    checked: boolean = false;
+  loginUser(): void {
+    this.submitted = true;
 
+    if (!this.login || !this.password) {
+      console.warn('Usuário/E-mail e senha são obrigatórios');
+      return;
+    }
+
+    // Simulação de login
+    console.log('Login com:', {
+      login: this.login,
+      password: this.password,
+      lembrar: this.rememberMe
+    });
+
+    // Redirecionamento futuro
+    // this.router.navigate(['/dashboard']);
+  }
 }

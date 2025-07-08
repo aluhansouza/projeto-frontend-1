@@ -12,18 +12,21 @@ import { forkJoin } from 'rxjs';
 // Serviços
 import { MaterialService } from '../../core/services/material.service';
 import { SetorService } from '../../core/services/setor.service';
+import { MarcaService } from '../../core/services/marca.service';
 import { CategoriaService } from '../../core/services/categoria.service';
 import { OrigemService } from '../../core/services/origem.service';
 
 // Models - API Responses
 import { MaterialApiResponse } from '../../core/models/material/material-api-response.model';
 import { SetorApiResponse } from '../../core/models/setor/setor-api-response.model';
+import { MarcaApiResponse } from '../../core/models/marca/marca-api-response.model';
 import { CategoriaApiResponse } from '../../core/models/categoria/categoria-api-response.model';
 import { OrigemApiResponse } from '../../core/models/origem/origem-api-response.model';
 
 // Models - DTOs
 import { MaterialResponseDTO } from '../../core/models/material/materialresponsedto.model';
 import { SetorResponseDTO } from '../../core/models/setor/setorresponsedto.model';
+import { MarcaResponseDTO } from '../../core/models/marca/marcaresponsedto.model';
 import { CategoriaResponseDTO } from '../../core/models/categoria/categoriaresponsedto.model';
 import { OrigemResponseDTO } from '../../core/models/origem/origemresponsedto.model';
 import { MaterialRequestDTO } from '../../core/models/material/materialrequestdto.model';
@@ -110,6 +113,7 @@ export class MateriaisComponent implements OnInit {
   selectedMateriais: MaterialResponseDTO[] = [];
 
   setores: SetorResponseDTO[] = [];
+  marcas: MarcaResponseDTO[] = [];
   categorias: CategoriaResponseDTO[] = [];
   origens: OrigemResponseDTO[] = [];
 
@@ -160,6 +164,7 @@ export class MateriaisComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private setorService: SetorService,
+    private marcaService: MarcaService,
     private categoriaService: CategoriaService,
     private origemService: OrigemService,
     private router: Router,
@@ -189,6 +194,7 @@ export class MateriaisComponent implements OnInit {
 
   ngOnInit(): void {
     this.carregarSetores();
+    this.carregarMarcas();
     this.carregarCategorias();
     this.carregarOrigens();
 
@@ -251,6 +257,20 @@ export class MateriaisComponent implements OnInit {
     });
   }
 
+  carregarMarcas(): void {
+    this.carregando = true;
+    this.marcaService.listarTodos().subscribe({
+      next: (dados /*: MarcaApiResponse*/) => {
+        this.marcas = dados; // Se precisar usar _embedded, ajuste aqui
+      },
+      error: (err) => {
+        console.error('Erro ao carregar marcas', err);
+      },
+      complete: () => {
+        this.carregando = false;
+      }
+    });
+  }  
 
   carregarCategorias(): void {
     this.carregando = true;
@@ -300,6 +320,7 @@ export class MateriaisComponent implements OnInit {
       vidaUtilAnos: 0,
       categoriaId: 0,
       setorId: 0,
+      marcaId: 0,
       origemId: 0
     };
   }
@@ -335,7 +356,7 @@ editarMaterial(material: MaterialResponseDTO): void {
   salvarMaterial(): void {
     this.submitted = true;
 
-    if (!this.material.nome || !this.material.setorId || !this.material.categoriaId || !this.material.origemId) {
+    if (!this.material.nome || !this.material.setorId || !this.material.marcaId || !this.material.categoriaId || !this.material.origemId) {
       this.messageService.add({
         severity: 'warn',
         summary: 'Aviso',
@@ -623,6 +644,7 @@ exportCSV(): void {
     'Nome',
     'Descrição',
     'Setor',
+    'Marca',
     'Categoria',
     'Origem',
     'Situação',
@@ -655,6 +677,7 @@ exportCSV(): void {
       `"${m.nome ?? ''}"`,
       `"${m.descricao ?? ''}"`,
       `"${this.getNomeSetor(m.setorId)}"`,
+      `"${this.getNomeMarca(m.marcaId)}"`,
       `"${this.getNomeCategoria(m.categoriaId)}"`,
       `"${this.getNomeOrigem(m.origemId)}"`,
       `"${this.getLabelSituacao(m.situacao)}"`,
@@ -714,6 +737,12 @@ getNomeSetor(setorId?: number): string {
   if (!setorId) return '-';
   const setor = this.setores.find(s => s.id === setorId);
   return setor ? setor.nome : '-';
+}
+
+getNomeMarca(marcaId?: number): string {
+  if (!marcaId) return '-';
+  const marca = this.marcas.find(s => s.id === marcaId);
+  return marca ? marca.nome : '-';
 }
 
 getNomeCategoria(categoriaId?: number): string {

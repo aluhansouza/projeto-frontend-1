@@ -1,22 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 
 import { SetorService } from '../../core/services/setor.service';
+import { MarcaService } from '../../core/services/marca.service';
 import { CategoriaService } from '../../core/services/categoria.service';
 import { OrigemService } from '../../core/services/origem.service';
 
 import { SetorApiResponse } from '../../core/models/setor/setor-api-response.model';
+import { MarcaApiResponse } from '../../core/models/marca/marca-api-response.model';
 import { CategoriaApiResponse } from '../../core/models/categoria/categoria-api-response.model';
 import { OrigemApiResponse } from '../../core/models/origem/origem-api-response.model';
 
 import { SetorResponseDTO } from '../../core/models/setor/setorresponsedto.model';              //ResponseDTO para resposta
+import { MarcaResponseDTO } from '../../core/models/marca/marcaresponsedto.model';
 import { CategoriaResponseDTO } from '../../core/models/categoria/categoriaresponsedto.model';
 import { OrigemResponseDTO } from '../../core/models/origem/origemresponsedto.model';
 
 import { SetorRequestDTO } from '../../core/models/setor/setorrequestdto.model';                //RequestDTO para enviar
+import { MarcaRequestDTO } from '../../core/models/marca/marcarequestdto.model';
 import { CategoriaRequestDTO } from '../../core/models/categoria/categoriarequestdto.model';
 import { OrigemRequestDTO } from '../../core/models/origem/origemrequestdto.model';
 
 import { toSetorRequestDTO } from '../../core/models/setor/setor.mapper';
+import { toMarcaRequestDTO } from '../../core/models/marca/marca.mapper';
 import { toCategoriaRequestDTO } from '../../core/models/categoria/categoria.mapper';
 import { toOrigemRequestDTO } from '../../core/models/origem/origem.mapper';
 
@@ -86,18 +91,22 @@ import { SelectModule } from 'primeng/select';
 export class ExtraComponent implements OnInit {
   ptBrLocale: any;
   setores: SetorResponseDTO[] = [];
+  marcas: MarcaResponseDTO[] = [];
   categorias: CategoriaResponseDTO[] = [];
   origens: OrigemResponseDTO[] = [];
 
   selectedSetores: SetorResponseDTO[] = [];
+  selectedMarcas: MarcaResponseDTO[] = [];
   selectedCategorias: CategoriaResponseDTO[] = [];
   selectedOrigens: OrigemResponseDTO[] = [];
 
   setor: SetorResponseDTO = this.criarSetorVazio();
+  marca: MarcaResponseDTO = this.criarMarcaVazio();
   categoria: CategoriaResponseDTO = this.criarCategoriaVazio();
   origem: OrigemResponseDTO = this.criarOrigemVazio();
 
   setorDialog = false;
+  marcaDialog = false;
   categoriaDialog = false;
   origemDialog = false;
 
@@ -110,6 +119,7 @@ export class ExtraComponent implements OnInit {
   
   constructor(
   private setorService: SetorService,
+  private marcaService: MarcaService,
   private categoriaService: CategoriaService,
   private origemService: OrigemService,
   private messageService: MessageService,
@@ -119,6 +129,12 @@ export class ExtraComponent implements OnInit {
 formularioValidoSetor(): boolean {
   return !!(
     this.setor.nome
+  );
+}
+
+formularioValidoMarca(): boolean {
+  return !!(
+    this.marca.nome
   );
 }
 
@@ -136,6 +152,7 @@ formularioValidoOrigem(): boolean {
 
   ngOnInit(): void {
     this.carregarSetores();
+    this.carregarMarcas();
     this.carregarCategorias();
     this.carregarOrigens();
   }
@@ -156,13 +173,28 @@ formularioValidoOrigem(): boolean {
   });
 }
 
+  carregarMarcas(): void {
+  this.carregando = true;
+  this.marcaService.listarTodos().subscribe({
+    next: (dados/*: MarcasApiResponse*/) => {
+      console.log(dados);
+      this.marcas = dados/*._embedded.marcas*/;
+    },
+    error: (err) => {
+      console.error('Erro ao carregar marcas', err);
+    },
+    complete: () => {
+      this.carregando = false;
+    }
+  });
+}
 
  carregarCategorias(): void {
   this.carregando = true;
   this.categoriaService.listarTodos().subscribe({
     next: (dados/*: CategoriaApiResponse*/) => {
       console.log(dados);
-      this.categorias = dados/*._embedded.setores*/;
+      this.categorias = dados/*._embedded.categorias*/;
     },
     error: (err) => {
       console.error('Erro ao carregar categorias', err);
@@ -196,6 +228,13 @@ formularioValidoOrigem(): boolean {
         this.setorDialog = true;
     }
 
+    novoMarca(): void {
+        this.marca = this.criarMarcaVazio();
+        this.isEditando = false;
+        this.submitted = false;
+        this.marcaDialog = true;
+    }
+
     novoCategoria(): void {
         this.categoria = this.criarCategoriaVazio();
         this.isEditando = false;
@@ -211,6 +250,12 @@ formularioValidoOrigem(): boolean {
     }
 
     criarSetorVazio(): SetorRequestDTO {
+        return {
+            nome: ''
+        };
+    }
+
+    criarMarcaVazio(): MarcaRequestDTO {
         return {
             nome: ''
         };
@@ -257,6 +302,43 @@ formularioValidoOrigem(): boolean {
                                 severity: 'error',
                                 summary: 'Erro',
                                 detail: 'Não foi possível excluir o setor.',
+                                life: 3000
+                            });
+                        }
+                    })
+            }
+        });
+    }
+
+    deletarMarca(id: number): void {
+        this.confirmationService.confirm({
+            message: 'Deseja realmente excluir esta Marca?',
+            header: 'Confirmação',
+            icon: 'pi pi-exclamation-triangle',
+            acceptLabel: 'Sim',
+            rejectLabel: 'Não',
+            acceptButtonStyleClass: 'p-button-success',
+            rejectButtonStyleClass: 'p-button-danger',
+            accept: () => {
+                this.loadingExcluir = true;
+                this.marcaService
+                    .excluir(id)
+                    .pipe(finalize(() => (this.loadingExcluir = false)))
+                    .subscribe({
+                        next: () => {
+                            this.carregarMarcas();
+                            this.messageService.add({
+                                severity: 'success',
+                                summary: 'Sucesso',
+                                detail: 'Marca excluído com sucesso!',
+                                life: 3000
+                            });
+                        },
+                        error: () => {
+                            this.messageService.add({
+                                severity: 'error',
+                                summary: 'Erro',
+                                detail: 'Não foi possível excluir a marca.',
                                 life: 3000
                             });
                         }
@@ -383,6 +465,50 @@ excluirSetoresSelecionados(): void {
   });
 }
 
+excluirMarcasSelecionados(): void {
+  if (this.selectedMarcas.length === 0) return;
+
+  this.confirmationService.confirm({
+    message: 'Deseja excluir as marcas selecionadas?',
+    header: 'Confirmação',
+    icon: 'pi pi-exclamation-triangle',
+    acceptLabel: 'Sim',
+    rejectLabel: 'Não',
+    acceptButtonStyleClass: 'p-button-success',
+    rejectButtonStyleClass: 'p-button-danger',
+    accept: () => {
+      this.loadingExcluirMassa = true;
+
+      const exclusoes = this.selectedMarcas
+        .filter(s => s.id !== undefined)
+        .map(s => this.marcaService.excluir(s.id!));
+
+      Promise.all(exclusoes.map(obs => obs.toPromise()))
+        .then(() => {
+          this.selectedMarcas = [];
+          this.carregarMarcas();
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Sucesso',
+            detail: 'Marcas excluídos com sucesso!',
+            life: 3000
+          });
+        })
+        .catch(() => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: 'Erro ao excluir marcas selecionadas.',
+            life: 3000
+          });
+        })
+        .finally(() => {
+          this.loadingExcluirMassa = false;
+        });
+    }
+  });
+}
+
 excluirCategoriasSelecionadas(): void {
   if (this.selectedCategorias.length === 0) return;
 
@@ -481,6 +607,16 @@ excluirOrigensSelecionadas(): void {
         this.setorDialog = true;
     }
 
+    editarMarca(marca: MarcaResponseDTO): void {
+        // Cria o MarcaRequestDTO apenas com os dados que serão enviados ao backend
+        this.marca = toMarcaRequestDTO(marca);
+        this.marca.id = marca.id;
+
+        this.isEditando = true;
+        this.submitted = false;
+        this.marcaDialog = true;
+    }
+
     editarCategoria(categoria: CategoriaResponseDTO): void {
         // Cria o categoriaRequestDTO apenas com os dados que serão enviados ao backend
         this.categoria = toCategoriaRequestDTO(categoria);
@@ -541,6 +677,51 @@ salvarSetor(): void {
         severity: 'error',
         summary: 'Erro',
         detail: `Não foi possível ${this.isEditando ? 'atualizar' : 'cadastrar'} o setor.`
+      });
+    }
+  });
+}
+
+salvarMarca(): void {
+  this.submitted = true;
+
+  if (!this.marca.nome) {
+    this.messageService.add({
+      severity: 'warn',
+      summary: 'Aviso',
+      detail: 'Preencha todos os campos obrigatórios.'
+    });
+    return;
+  }
+
+  this.loadingSalvar = true;
+  const marcaData: MarcaRequestDTO = toMarcaRequestDTO(this.marca);
+  let acao;
+
+  if (this.isEditando && this.marca.id) {
+    acao = this.marcaService.atualizar(this.marca.id, marcaData);
+  } else {
+    acao = this.marcaService.cadastrar(marcaData);
+  }
+
+  acao.pipe(
+    delay(1000),
+    finalize(() => (this.loadingSalvar = false))
+  ).subscribe({
+    next: () => {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Sucesso',
+        detail: `marca ${this.isEditando ? 'atualizado' : 'cadastrado'} com sucesso!`
+      });
+      this.marcaDialog = false;
+      this.carregarMarcas();
+    },
+    error: () => {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Erro',
+        detail: `Não foi possível ${this.isEditando ? 'atualizar' : 'cadastrar'} a marca.`
       });
     }
   });

@@ -15,6 +15,7 @@
 
 
 <div class="container-tabelas">
+  <div class="coluna">
 <!-- TABELA DE SETORES -->
 <p-table 
   #dtSetor 
@@ -144,14 +145,142 @@
   </ng-template>
 </p-dialog>
 
+<!-- TABELA DE MARCAS -->
+<p-table 
+  #dtMarca 
+  [value]="marcas" 
+  [(selection)]="selectedMarcas" 
+  [paginator]="true" 
+  [rows]="10" 
+  [rowHover]="true" 
+  [rowsPerPageOptions]="[5,10,20]" 
+  dataKey="id"
+  [tableStyle]="{ 'min-width': '40rem' }"
+  [globalFilterFields]="['nome']"
+  currentPageReportTemplate="Mostrando de {first} até {last} de {totalRecords} marcas"
+  [showCurrentPageReport]="true"
+  [responsiveLayout]="'scroll'">
 
+  <!-- TOPO: AÇÕES E FILTRO -->
+<ng-template #caption>
+  <div class="flex items-center justify-between">
+    <h5 class="m-0">Gerenciar Marcas</h5>
 
+    <!-- Barra de pesquisa -->
+    <p-iconfield>
+      <p-inputicon styleClass="pi pi-search"></p-inputicon>
+      <input pInputText type="text" (input)="onGlobalFilter(dtMarca, $event)" placeholder="Pesquisar..." />
+    </p-iconfield>
+  </div>
+
+  <!-- Linha de botões: esquerdo (Novo, Excluir), direito (Exportar) -->
+  <div class="mt-3 flex justify-between items-center">
+    <div class="flex gap-2">
+      <p-button label="Nova Marca" icon="pi pi-plus" severity="secondary" (onClick)="novoMarca()" />
+      <p-button 
+        label="Excluir" 
+        icon="pi pi-trash" 
+        severity="secondary" 
+        outlined 
+        (onClick)="excluirMarcasSelecionados()" 
+        [disabled]="!selectedMarcas.length" />
+    </div>
+
+    <p-button 
+      label="Exportar para CSV" 
+      icon="pi pi-upload" 
+      severity="secondary" 
+      (onClick)="exportCSV()" />
+  </div>
+</ng-template>
+
+  <!-- CABEÇALHO -->
+  <ng-template #header>
+    <tr>
+      <th style="width: 3rem"><p-tableHeaderCheckbox /></th>
+      <th pSortableColumn="id">ID <p-sortIcon field="id" /></th>
+      <th pSortableColumn="nome">Nome <p-sortIcon field="nome" /></th>
+      <th>Ações</th>
+    </tr>
+  </ng-template>
+
+  <!-- CORPO -->
+  <ng-template #body let-marca>
+    <tr>
+      <td><p-tableCheckbox [value]="marca" /></td>
+      <td>{{ marca.id }}</td>
+      <td>{{ marca.nome }}</td>
+      <td>
+        <p-button 
+          icon="pi pi-pencil" 
+          class="mr-2" 
+          (click)="editarMarca(marca)" 
+          [rounded]="true" 
+          [outlined]="true" 
+          severity="secondary" />
+        <p-button 
+          icon="pi pi-trash" 
+          (click)="deletarMarca(marca.id!)" 
+          [rounded]="true" 
+          [outlined]="true" 
+          severity="danger" />
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<!-- MODAL DE CADASTRO/EDIÇÃO DE MARCA -->
+<p-dialog 
+  [(visible)]="marcaDialog" 
+  [style]="{ width: '900px', height: 'auto' }" 
+  header="Detalhes da Marca" 
+  [modal]="true">
+
+  <div class="flex flex-col gap-6" *ngIf="!loadingSalvar">
+    <!-- Nome -->
+    <div class="campo">
+      <label for="nome" class="block font-bold mb-2">Nome</label>
+      <input 
+        type="text" 
+        pInputText 
+        id="nome" 
+        [(ngModel)]="marca.nome" 
+        required 
+        autofocus 
+        class="w-full" />
+      <small class="text-red-500" *ngIf="submitted && !marca.nome">Nome é obrigatório.</small>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <ng-template #footer>
+    <div class="footer-left">
+      <p-button 
+        label="Cancelar" 
+        icon="pi pi-times" 
+        text 
+        (click)="marcaDialog = false">
+      </p-button>
+
+      <p-button
+        label="Salvar"
+        icon="pi pi-check"
+        (click)="salvarMarca()"
+        [disabled]="loadingSalvar || !formularioValidoMarca()"
+        [loading]="loadingSalvar"
+        class="ml-2">
+      </p-button>
+    </div>
+  </ng-template>
+</p-dialog>
+</div>
 
 
 
 
 
 <!-- TABELA DE CATEGORIAS -->
+ <div class="coluna">
 <p-table 
   #dtCategoria
   [value]="categorias" 
@@ -415,4 +544,5 @@
     </div>
   </ng-template>
 </p-dialog>
+</div>
 </div>
