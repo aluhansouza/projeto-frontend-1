@@ -1,4 +1,3 @@
-// src/app/core/services/auth/auth.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
@@ -34,19 +33,30 @@ export class AuthService {
     return !!this.getToken();
   }
 
+  /**
+   * Retorna as roles do usuário autenticado com base no token JWT.
+   * Simula temporariamente ROLE_ADMINISTRADOR.
+   */
   getRoles(): string[] {
-  // --- SIMULAÇÃO TEMPORÁRIA ---
-  return ['ROLE_ADMINISTRADOR'];
+    // --- SIMULAÇÃO TEMPORÁRIA ---
+    return ['ROLE_ADMINISTRADOR'];
 
-  // --- ORIGINAL ---
-  // const token = this.getToken();
-  // if (!token) return [];
-  // try {
-  //   const decoded: any = jwtDecode(token);
-  //   return decoded.authorities ?? decoded.roles ?? [];
-  // } catch {
-  //   return [];
-  // }
-}
+    // --- ORIGINAL ---
+    // const token = this.getToken();
+    // if (!token) return [];
+    // try {
+    //   const decoded: any = jwtDecode(token);
+    //   return decoded.authorities ?? decoded.roles ?? [];
+    // } catch {
+    //   return [];
+    // }
+  }
 
+  /**
+   * Verifica se o usuário possui pelo menos uma das roles informadas.
+   */
+  hasAnyRole(roles: string[]): boolean {
+    const userRoles = this.getRoles();
+    return roles.some(role => userRoles.includes(role));
+  }
 }

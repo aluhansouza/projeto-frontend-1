@@ -29,22 +29,22 @@ export class AppMenu {
     items: [
       {
         label: 'Cadastros',
-        icon: 'pi pi-fw pi-users', // ícone mais genérico para usuários/cadastros
+        icon: 'pi pi-fw pi-users',
         items: [
           {
             label: 'Materiais',
-            icon: 'pi pi-fw pi-box', // ícone caixa/equipamento
-            routerLink: ['recursos/materiais']
+            icon: 'pi pi-fw pi-box',
+            routerLink: ['/recursos/materiais']
           },
           {
             label: 'Extras',
-            icon: 'pi pi-fw pi-tags', // ícone para categorias, setores, tags
+            icon: 'pi pi-fw pi-tags',
             routerLink: ['/recursos/extra']
           },
           {
             label: 'Usuários',
-            icon: 'pi pi-fw pi-user', // ícone usuário
-            routerLink: ['/cadastros/usuarios/usuarios.component.ts']
+            icon: 'pi pi-fw pi-user',
+            routerLink: ['/cadastros/usuarios']
           },
           {
             label: 'Login',
@@ -52,34 +52,39 @@ export class AppMenu {
             routerLink: ['/auth/login']
           },
           {
-            label: 'Error',
+            label: 'Erro de Sistema',
             icon: 'pi pi-fw pi-times-circle',
             routerLink: ['/auth/error']
           },
           {
-            label: 'Access Denied',
+            label: 'Acesso Negado',
             icon: 'pi pi-fw pi-lock',
             routerLink: ['/auth/access']
           },
           {
-            label: 'Crud',
+            label: 'Bloqueado',
+            icon: 'pi pi-fw pi-ban',
+            routerLink: ['/sem-permissao']
+          },
+          {
+            label: 'CRUD',
             icon: 'pi pi-fw pi-pencil',
             routerLink: ['/paginas/crud']
           },
           {
-            label: 'Crud',
+            label: 'CRUD Alternativo',
             icon: 'pi pi-fw pi-pencil',
             routerLink: ['/cadastros/crud']
           }
         ]
       },
       {
-        label: 'Not Found',
+        label: 'Página Não Encontrada',
         icon: 'pi pi-fw pi-exclamation-circle',
-        routerLink: ['/pages/notfound']
+        routerLink: ['/notfound']
       },
       {
-        label: 'Empty',
+        label: 'Página Vazia',
         icon: 'pi pi-fw pi-circle-off',
         routerLink: ['/pages/empty']
       }

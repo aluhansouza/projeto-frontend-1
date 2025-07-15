@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
+import { AuthService } from '../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-notfound',
@@ -56,11 +57,28 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
               </span>
             </a>
 
-            <p-button label="Ir para o Painel" routerLink="/" />
+            <!-- Botão para o painel -->
+            <p-button label="Ir para o Painel" routerLink="/" class="mb-3" />
+
+            <!-- Botão de logout -->
+            <p-button 
+              label="Sair do Sistema" 
+              icon="pi pi-sign-out" 
+              severity="danger" 
+              (onClick)="logout()" 
+            />
           </div>
         </div>
       </div>
     </div>
   `
 })
-export class Notfound {}
+export class Notfound {
+  constructor(private router: Router, private authService: AuthService) {}
+
+  logout() {
+    localStorage.removeItem('authToken');
+    this.authService.logout();
+    this.router.navigate(['/auth/login']);
+  }
+}

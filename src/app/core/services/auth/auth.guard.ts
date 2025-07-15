@@ -1,23 +1,25 @@
-// src/app/core/services/auth/auth.guard.ts
 import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
+import { CanActivateFn, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { AuthService } from './auth.service';
 
-export const authGuard: CanActivateFn = () => {
+export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  const token = authService.getToken();
-  if (!token) {
-    return router.parseUrl('/auth/login'); // Redireciona para login
+  if (!authService.isLoggedIn()) {
+    console.warn('[AuthGuard] Usuário não autenticado.');
+    return router.createUrlTree(['/auth/login']);
   }
 
-  const roles = authService.getRoles(); // Decodifica os roles do JWT
-  console.log('Roles do usuário:', roles);
+  const roles = authService.getRoles();
+  console.info('[AuthGuard] Roles do usuário:', roles);
 
-  if (roles.includes('ROLE_ADMINISTRADOR')) {
-    return true; // Permite o acesso
+  const requiredRoles = route.data?.['roles'] as string[] | undefined;
+
+  if (requiredRoles && !authService.hasAnyRole(requiredRoles)) {
+    console.warn('[AuthGuard] Acesso negado. Roles exigidas:', requiredRoles);
+    return router.createUrlTree(['/auth/access']);
   }
 
-  return router.parseUrl('/notfound'); // Ou outra página de "sem permissão"
+  return true;
 };
