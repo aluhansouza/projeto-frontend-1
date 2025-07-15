@@ -5,7 +5,6 @@ import { MaterialRequestDTO } from '../models/material/materialrequestdto.model'
 import { MaterialResponseDTO } from '../models/material/materialresponsedto.model';
 import { MaterialApiResponse } from '../models/material/material-api-response.model';
 
-
 @Injectable({
     providedIn: 'root'
 })
@@ -64,16 +63,14 @@ export class MaterialService {
         return this.http.get<any>(`${this.apiUrl}/verificar-conexao`, { responseType: 'text' as 'json' });
     }
 
-      cadastrarComImagem(formData: FormData): Observable<MaterialResponseDTO> {
-    return this.http.post<MaterialResponseDTO>(`${this.apiUrl}`, formData);
-  }
+    cadastrarComImagem(formData: FormData): Observable<MaterialResponseDTO> {
+        return this.http.post<MaterialResponseDTO>(`${this.apiUrl}`, formData);
+    }
 
-  atualizarComImagem(id: number, formData: FormData): Observable<MaterialResponseDTO> {
-    return this.http.put<MaterialResponseDTO>(`${this.apiUrl}/${id}`, formData);
- }
-buscarPorId(id: number): Observable<MaterialResponseDTO> {
-  return this.http.get<MaterialResponseDTO>(`${this.apiUrl}/${id}`);
-}
-
-
+    atualizarComImagem(id: number, formData: FormData): Observable<MaterialResponseDTO> {
+        return this.http.put<MaterialResponseDTO>(`${this.apiUrl}/${id}`, formData);
+    }
+    buscarPorId(id: number): Observable<MaterialResponseDTO> {
+        return this.http.get<MaterialResponseDTO>(`${this.apiUrl}/${id}`);
+    }
 }

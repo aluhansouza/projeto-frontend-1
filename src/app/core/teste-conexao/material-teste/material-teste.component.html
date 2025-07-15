@@ -1,4 +1,6 @@
-<div>
-  <h2>B1</h2>
-  <p>{{ mensagem }}</p>
+<!-- Conteúdo normal da página aqui -->
+
+<!-- Mensagem discreta para dev -->
+<div class="debug-status" *ngIf="mensagem" [title]="mensagem">
+  {{ mensagem }}
 </div>

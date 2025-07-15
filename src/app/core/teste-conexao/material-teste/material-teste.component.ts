@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';   // <-- IMPORTAR
 import { MaterialService } from '../../services/material.service';
 
 @Component({
@@ -6,7 +7,7 @@ import { MaterialService } from '../../services/material.service';
     templateUrl: './material-teste.component.html',
     styleUrls: ['./material-teste.component.scss'],
     standalone: true,
-    imports: []
+    imports: [CommonModule]  // <-- INCLUIR CommonModule aqui
 })
 export class MaterialTesteComponent {
     mensagem: string = '';

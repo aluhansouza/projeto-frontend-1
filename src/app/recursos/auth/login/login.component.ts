@@ -1,54 +1,54 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '../../../layout/component/app.floatingconfigurator';
+import { AuthService } from '../../../core/services/auth/auth.service';
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
-  imports: [
-    FormsModule,
-    RouterModule,
-    ButtonModule,
-    CheckboxModule,
-    InputTextModule,
-    PasswordModule,
-    RippleModule,
-    AppFloatingConfigurator
-  ]
+    selector: 'app-login',
+    standalone: true,
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.scss',
+    imports: [CommonModule, FormsModule, ButtonModule, CheckboxModule, InputTextModule, PasswordModule, RippleModule, AppFloatingConfigurator]
 })
 export class LoginComponent {
+    login: string = '';
+    password: string = '';
+    rememberMe: boolean = false;
+    submitted: boolean = false;
+    loading: boolean = false;
+    error: string = '';
 
-  login: string = ''; // Agora é genérico: pode ser e-mail ou nome de usuário
-  password: string = '';
-  rememberMe: boolean = false;
-  submitted: boolean = false;
+    constructor(
+        private authService: AuthService,
+        private router: Router
+    ) {}
 
-  constructor() {}
+    loginUsuario(): void {
+        this.submitted = true;
+        this.error = '';
 
-  loginUser(): void {
-    this.submitted = true;
+        if (!this.login || !this.password) {
+            this.error = 'Usuário/E-mail e senha são obrigatórios';
+            return;
+        }
 
-    if (!this.login || !this.password) {
-      console.warn('Usuário/E-mail e senha são obrigatórios');
-      return;
+        this.loading = true;
+        this.authService.login(this.login, this.password).subscribe({
+            next: () => {
+                this.loading = false;
+                this.router.navigate(['/']);
+            },
+            error: () => {
+                this.loading = false;
+                this.error = 'Usuário ou senha inválidos!';
+            }
+        });
     }
-
-    // Simulação de login
-    console.log('Login com:', {
-      login: this.login,
-      password: this.password,
-      lembrar: this.rememberMe
-    });
-
-    // Redirecionamento futuro
-    // this.router.navigate(['/dashboard']);
-  }
 }

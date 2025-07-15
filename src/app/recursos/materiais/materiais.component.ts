@@ -37,6 +37,7 @@ import { TipoDepreciacao } from '../../core/models/enums/tipo-depreciacao.materi
 
 // Utilitários
 import { toMaterialRequestDTO } from '../../core/models/material/material.mapper';
+import { MaterialTesteComponent } from '../../core/teste-conexao/material-teste/material-teste.component';
 
 // PrimeNG Services
 import { MessageService, ConfirmationService } from 'primeng/api';
@@ -101,6 +102,7 @@ import { SpinnerOverlayComponent } from '../../shared/spinner-overlay/spinner-ov
     DatePickerModule,
     FileUploadModule,
     SelectModule,
+    MaterialTesteComponent,
   ]
 })
 export class MateriaisComponent implements OnInit {
@@ -494,7 +496,7 @@ editarMaterial(material: MaterialResponseDTO): void {
 
   onPatrimonioKeyPress(event: KeyboardEvent) {
     const input = event.target as HTMLInputElement;
-    if (!/[0-9]/.test(event.key) || input.value.length >= 4) {
+    if (!/[0-9]/.test(event.key) || input.value.length >= 12) {
       event.preventDefault();
     }
   }

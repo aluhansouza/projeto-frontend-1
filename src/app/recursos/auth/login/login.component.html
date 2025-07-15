@@ -1,40 +1,25 @@
 <app-floating-configurator />
 
-<div
-  class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen w-screen overflow-hidden"
-  style="background-image: url('LOGO 1920X1080.png'); background-size: cover"
->
+<div class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen w-screen overflow-hidden" style="background-image: url('LOGO 1920X1080.png'); background-size: cover">
   <div class="flex flex-col items-center justify-center">
-    <div
-      class="rounded-[56px] p-1"
-      style="background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)"
-    >
+    <div class="rounded-[56px] p-1" style="background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
       <div class="w-[600px] bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20 rounded-[53px]">
         <!-- Logo e nome da emissora -->
         <div class="flex items-center justify-center mb-10">
           <a class="flex flex-col items-center gap-4 no-underline text-inherit" routerLink="/">
-            <img src="../../../../assets/image/logo.png" alt="Logo Encontro das Águas" class="h-40 w-auto" />
+            <img src="assets/image/logo.png" alt="Logo Encontro das Águas" class="h-40 w-auto" />
             <span class="text-2xl font-bold text-surface-900 dark:text-surface-0">Encontro das Águas</span>
           </a>
         </div>
 
         <!-- Formulário -->
-        <form (ngSubmit)="loginUser()" class="w-full">
+        <form (ngSubmit)="loginUsuario()" class="w-full">
           <!-- Usuário ou E-mail -->
           <div class="mb-6">
             <label for="login" class="block text-xl font-medium text-surface-900 dark:text-surface-0 mb-2">
               Usuário ou E-mail
             </label>
-            <input
-              id="login"
-              pInputText
-              type="text"
-              [(ngModel)]="login"
-              name="login"
-              placeholder="Digite seu usuário ou e-mail"
-              class="w-full"
-              required
-            />
+            <input id="login" pInputText type="text" [(ngModel)]="login" name="login" placeholder="Digite seu usuário ou e-mail" class="w-full" required />
           </div>
 
           <!-- Senha -->
@@ -42,16 +27,7 @@
             <label for="password" class="block text-xl font-medium text-surface-900 dark:text-surface-0 mb-2">
               Senha
             </label>
-            <p-password
-              id="password"
-              [(ngModel)]="password"
-              name="password"
-              placeholder="Digite sua senha"
-              [toggleMask]="true"
-              [feedback]="false"
-              inputClass="w-full"
-              required
-            ></p-password>
+            <p-password id="password" [(ngModel)]="password" name="password" placeholder="Digite sua senha" [toggleMask]="true" [feedback]="false" inputClass="w-full" required></p-password>
           </div>
 
           <!-- Lembrar e esquecer -->
@@ -63,13 +39,13 @@
             <a class="text-primary font-medium text-sm cursor-pointer">Esqueci a senha</a>
           </div>
 
+          <!-- Mensagem de erro -->
+          <div *ngIf="error" class="text-red-600 text-center mb-4">
+            {{ error }}
+          </div>
+
           <!-- Botão de login -->
-          <p-button
-            label="Entrar"
-            styleClass="w-full"
-            type="submit"
-            [disabled]="!login || !password"
-          ></p-button>
+          <p-button label="Entrar" styleClass="w-full" type="submit" [disabled]="!login || !password"></p-button>
         </form>
       </div>
     </div>
