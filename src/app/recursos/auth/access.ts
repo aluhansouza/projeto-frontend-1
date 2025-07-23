@@ -10,7 +10,6 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
   imports: [ButtonModule, RouterModule, RippleModule, AppFloatingConfigurator],
   template: `
     <app-floating-configurator />
-
     <div class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-[100vw] overflow-hidden">
       <div class="flex flex-col items-center justify-center">
         <div
@@ -27,22 +26,18 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
               >
                 <i class="text-orange-500 pi pi-fw pi-lock !text-2xl"></i>
               </div>
-
               <h1 class="text-surface-900 dark:text-surface-0 font-bold text-4xl lg:text-5xl mb-2">
                 Acesso Negado
               </h1>
-
               <span class="text-muted-color mb-8 text-center max-w-md">
                 Você não tem permissão para acessar este recurso. Entre em contato com um administrador do sistema se acredita que isso é um erro.
               </span>
-
               <img
                 src="https://primefaces.org/cdn/templates/sakai/auth/asset-access.svg"
                 alt="Access denied"
                 class="mb-8"
                 width="80%"
               />
-
               <div class="col-span-12 mt-8 text-center">
                 <button
                   pButton

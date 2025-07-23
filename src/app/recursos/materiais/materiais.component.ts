@@ -219,7 +219,7 @@ export class MateriaisComponent implements OnInit {
     this.carregando = true;
     this.materialService.listarTodos().subscribe({
       next: (dados: MaterialApiResponse) => {
-        this.materiais = dados._embedded.materiais;
+        this.materiais = dados._embedded?.materiais || [];
 
         // Gerar QR codes para cada material
         setTimeout(() => {

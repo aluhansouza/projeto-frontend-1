@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { AppMenuitem } from './app.menuitem';
+import { AuthService } from '../../core/services/auth/auth.service';
 
 @Component({
     selector: 'app-menu',
@@ -17,80 +18,86 @@ import { AppMenuitem } from './app.menuitem';
 })
 export class AppMenu {
     model: MenuItem[] = [];
+    isAdmin = false;
+
+    constructor(public authService: AuthService) {}
 
     ngOnInit() {
-        this.model = [
-  {
-    items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }]
-  },
-  {
-    icon: 'pi pi-fw pi-briefcase',
-    routerLink: ['/paginas'],
-    items: [
-      {
-        label: 'Cadastros',
-        icon: 'pi pi-fw pi-users',
-        items: [
-          {
-            label: 'Materiais',
-            icon: 'pi pi-fw pi-box',
-            routerLink: ['/recursos/materiais']
-          },
-          {
-            label: 'Extras',
-            icon: 'pi pi-fw pi-tags',
-            routerLink: ['/recursos/extra']
-          },
-          {
-            label: 'Usuários',
-            icon: 'pi pi-fw pi-user',
-            routerLink: ['/cadastros/usuarios']
-          },
-          {
-            label: 'Login',
-            icon: 'pi pi-fw pi-sign-in',
-            routerLink: ['/auth/login']
-          },
-          {
-            label: 'Erro de Sistema',
-            icon: 'pi pi-fw pi-times-circle',
-            routerLink: ['/auth/error']
-          },
-          {
-            label: 'Acesso Negado',
-            icon: 'pi pi-fw pi-lock',
-            routerLink: ['/auth/access']
-          },
-          {
-            label: 'Bloqueado',
-            icon: 'pi pi-fw pi-ban',
-            routerLink: ['/sem-permissao']
-          },
-          {
-            label: 'CRUD',
-            icon: 'pi pi-fw pi-pencil',
-            routerLink: ['/paginas/crud']
-          },
-          {
-            label: 'CRUD Alternativo',
-            icon: 'pi pi-fw pi-pencil',
-            routerLink: ['/cadastros/crud']
-          }
-        ]
-      },
-      {
-        label: 'Página Não Encontrada',
-        icon: 'pi pi-fw pi-exclamation-circle',
-        routerLink: ['/notfound']
-      },
-      {
-        label: 'Página Vazia',
-        icon: 'pi pi-fw pi-circle-off',
-        routerLink: ['/pages/empty']
-      }
-    ]
-  }
-];
+        this.isAdmin = this.authService.verificarUsuarioAdministrador();
 
+        this.model = [
+            {
+                items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }]
+            },
+            {
+                icon: 'pi pi-fw pi-briefcase',
+                routerLink: ['/paginas'],
+                items: [
+                    {
+                        label: 'Cadastros',
+                        icon: 'pi pi-fw pi-users',
+                        items: [
+                            {
+                                label: 'Materiais',
+                                icon: 'pi pi-fw pi-box',
+                                routerLink: ['/recursos/materiais'],
+                                visible: this.isAdmin
+                            },
+                            {
+                                label: 'Extras',
+                                icon: 'pi pi-fw pi-tags',
+                                routerLink: ['/recursos/extra'],
+                                visible: this.isAdmin
+                            },
+                            {
+                                label: 'Usuários',
+                                icon: 'pi pi-fw pi-user',
+                                routerLink: ['/administrativo/usuarios']
+                            },
+                            {
+                                label: 'Login',
+                                icon: 'pi pi-fw pi-sign-in',
+                                routerLink: ['/auth/login']
+                            },
+                            {
+                                label: 'Erro de Sistema',
+                                icon: 'pi pi-fw pi-times-circle',
+                                routerLink: ['/auth/error']
+                            },
+                            {
+                                label: 'Acesso Negado',
+                                icon: 'pi pi-fw pi-lock',
+                                routerLink: ['/auth/access']
+                            },
+                            {
+                                label: 'Bloqueado',
+                                icon: 'pi pi-fw pi-ban',
+                                routerLink: ['/sem-permissao']
+                            },
+                            {
+                                label: 'CRUD',
+                                icon: 'pi pi-fw pi-pencil',
+                                routerLink: ['/paginas/crud']
+                            },
+                            {
+                                label: 'CRUD Alternativo',
+                                icon: 'pi pi-fw pi-pencil',
+                                routerLink: ['/cadastros/crud']
+                            }
+                        ]
+                    },
+                    {
+                        label: 'Página Não Encontrada',
+                        icon: 'pi pi-fw pi-exclamation-circle',
+                        routerLink: ['/notfound']
+                    },
+                    {
+                        label: 'Página Vazia',
+                        icon: 'pi pi-fw pi-circle-off',
+                        routerLink: ['/pages/empty']
+                    }
+                ]
+            }
+        ];
     }
 }

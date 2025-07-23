@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 export default [
   {
     path: 'usuarios',
-    loadChildren: () => import('./usuarios/usuarios.routes').then(m => m.default)
+    loadChildren: () => import('../paginas/cadastros/usuarios/usuarios.routes').then(m => m.default)
   },
   {
     path: 'materiais',

@@ -1,1 +1,117 @@
-<p>usuarios works!</p>
+<!-- TOPO DA TABELA -->
+<p-toolbar styleClass="mb-6">
+  <ng-template #start>
+    <p-button label="Novo Cadastro" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="novoUsuario()" />
+    <p-button label="Excluir" icon="pi pi-trash" severity="secondary" outlined (onClick)="excluirSelecionados()" [disabled]="!selectedUsuarios || !selectedUsuarios.length" />
+  </ng-template>
+
+  <ng-template #end>
+    <p-button label="Exportar para CSV" icon="pi pi-upload" severity="secondary" (onClick)="exportCSV()" />
+  </ng-template>
+</p-toolbar>
+
+<!-- SPINNERS -->
+<app-spinner-gradiente *ngIf="loadingSalvar || loadingExcluir || loadingExcluirMassa"></app-spinner-gradiente>
+
+<!-- Overlay Exclusão em Massa -->
+<app-spinner-overlay [visible]="loadingExcluirMassa || loadingExcluir" />
+
+<!-- TABELA DE USUÁRIOS -->
+<p-table #dt [value]="usuarios" [(selection)]="selectedUsuarios" [paginator]="true" [rows]="10" [rowHover]="true" [rowsPerPageOptions]="[5, 10, 20]" dataKey="id" [tableStyle]="{ 'min-width': '75rem' }" [globalFilterFields]="['nome', 'email', 'perfil.nome']" currentPageReportTemplate="Mostrando de {first} até {last} de {totalRecords} usuários" [showCurrentPageReport]="true" [responsiveLayout]="'scroll'">
+
+  <!-- CABEÇALHO DA TABELA -->
+  <ng-template #caption>
+    <div class="flex items-center justify-between">
+      <h5 class="m-0">Gerenciar Usuários</h5>
+      <p-iconfield>
+        <p-inputicon styleClass="pi pi-search"></p-inputicon>
+        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Pesquisar..." />
+      </p-iconfield>
+    </div>
+  </ng-template>
+
+  <!-- COLUNAS -->
+  <ng-template #header>
+    <tr>
+      <th style="width: 3rem"><p-tableHeaderCheckbox /></th>
+      <th pSortableColumn="id" style="min-width: 6rem">ID <p-sortIcon field="id" /></th>
+      <th pSortableColumn="nome" style="min-width: 16rem">Nome <p-sortIcon field="nome" /></th>
+      <th pSortableColumn="email" style="min-width: 20rem">Email <p-sortIcon field="email" /></th>
+      <th pSortableColumn="perfil.nome" style="min-width: 14rem">Perfil <p-sortIcon field="perfil.nome" /></th>
+      <th style="min-width: 10rem">Ações</th>
+    </tr>
+  </ng-template>
+
+  <!-- CORPO -->
+  <ng-template #body let-usuario>
+    <tr>
+      <td><p-tableCheckbox [value]="usuario" /></td>
+      <td>{{ usuario.id }}</td>
+      <td>{{ usuario.nome }}</td>
+      <td>{{ usuario.email }}</td>
+      <td>{{ usuario.perfilNome }}</td>
+      <td>
+        <p-button icon="pi pi-pencil" class="mr-2" (click)="editarUsuario(usuario)" [rounded]="true" [outlined]="true" severity="secondary" />
+        <p-button icon="pi pi-trash" (click)="deletarUsuario(usuario.id!)" [rounded]="true" [outlined]="true" severity="danger" />
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<!-- MODAL DE CADASTRO/EDIÇÃO -->
+<p-dialog [(visible)]="usuarioDialog" [style]="{ width: '450px', height: '600px' }" header="Detalhes do Usuário" [modal]="true">
+
+  <!-- SPINNER DE SALVAR NO MODAL -->
+  <p-progressSpinner *ngIf="loadingSalvar" styleClass="overlay-spinner custom-spinner" strokeWidth="4" animationDuration=".5s" aria-label="Salvando...">
+  </p-progressSpinner>
+
+  <div class="flex flex-col gap-6" *ngIf="!loadingSalvar">
+    <!-- Campo Nome -->
+    <div>
+      <label for="nome" class="block font-bold mb-2">Nome</label>
+      <input type="text" pInputText id="nome" [(ngModel)]="usuario.nome" required autofocus class="w-full" />
+      <small class="text-red-500" *ngIf="submitted && !usuario.nome">Nome é obrigatório.</small>
+    </div>
+
+    <!-- Campo Email -->
+    <div>
+      <label for="email" class="block font-bold mb-2">Email</label>
+      <input type="email" pInputText id="email" [(ngModel)]="usuario.email" required class="w-full" />
+      <small class="text-red-500" *ngIf="submitted && !usuario.email">Email é obrigatório.</small>
+    </div>
+
+    <!-- Campo Senha (apenas novo) -->
+    <div *ngIf="!isEditando">
+      <label for="senha" class="block font-bold mb-2">Senha</label>
+      <input type="password" pInputText id="senha" [(ngModel)]="usuario.senha" required class="w-full" />
+      <small class="text-red-500" *ngIf="submitted && !usuario.senha">Senha é obrigatória.</small>
+    </div>
+
+    <!-- Campo Perfil -->
+    <div>
+      <label for="perfil" class="block font-bold mb-2">Perfil</label>
+      <p-dropdown id="perfil" [options]="perfis" [(ngModel)]="usuario.perfilId" optionLabel="nome" optionValue="id" placeholder="Selecione um perfil" class="w-full">
+      </p-dropdown>
+      <small class="text-red-500" *ngIf="submitted && !usuario.perfilId">Perfil é obrigatório.</small>
+    </div>
+  </div>
+
+  <!-- RODAPÉ DO MODAL -->
+  <ng-template #footer>
+    <p-button label="Cancelar" icon="pi pi-times" text (click)="usuarioDialog = false" />
+    <p-button label="Salvar" icon="pi pi-check" (click)="salvarUsuario()" [disabled]="loadingSalvar || !formularioValido()" [loading]="loadingSalvar">
+    </p-button>
+  </ng-template>
+</p-dialog>
+
+<!-- FIM MODAL CADASTRO -->
+
+
+
+
+
+
+<!-- Diálogo de Confirmação -->
+<p-confirmdialog [style]="{ width: '500px' }" />
+
+<!-- AREA DE TESTE-->

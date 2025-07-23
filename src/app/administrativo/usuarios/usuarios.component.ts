@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Usuario } from '../../core/models/usuario.model';
-import { Perfil } from '../../core/models/perfil.model';
-import { UsuarioService } from '../../core/services/usuario.service';
+import { Usuario } from '../../../app/core/models/usuario.model';
+import { Perfil } from '../../../app/core/models/perfil.model';
+import { UsuarioService } from '../../../app/core/services/usuario.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
