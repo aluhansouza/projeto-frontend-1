@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import QRCodeStyling from 'qr-code-styling';
 import { finalize, delay } from 'rxjs';
 import { forkJoin } from 'rxjs';
+import { jsPDF } from "jspdf";
 
 // Serviços
 import { MaterialService } from '../../core/services/material.service';
@@ -320,10 +321,12 @@ export class MateriaisComponent implements OnInit {
       valorCompra: 0,
       valorAtual: 0,
       vidaUtilAnos: 0,
+      numSerie: 0,
+      modelo: '',
       categoriaId: 0,
       setorId: 0,
       marcaId: 0,
-      origemId: 0
+      origemId: 0,
     };
   }
 
@@ -534,7 +537,7 @@ editarMaterial(material: MaterialResponseDTO): void {
     qr.append(container);
   }
 
-  // Ajuste do estilo do canvas para ficar bonitinho
+  // Ajuste do estilo do canvas
   setTimeout(() => {
     const canvas = container?.querySelector('canvas') as HTMLCanvasElement;
     if (canvas) {
@@ -649,6 +652,8 @@ exportCSV(): void {
     'Marca',
     'Categoria',
     'Origem',
+    'modelo',
+    'numserie',
     'Situação',
     'Patrimônio',
     'Valor Compra (R$)',
@@ -682,6 +687,8 @@ exportCSV(): void {
       `"${this.getNomeMarca(m.marcaId)}"`,
       `"${this.getNomeCategoria(m.categoriaId)}"`,
       `"${this.getNomeOrigem(m.origemId)}"`,
+      `"${m.modelo ?? ''}"`,
+      `"${m.numSerie ?? ''}"`,
       `"${this.getLabelSituacao(m.situacao)}"`,
       `"${m.patrimonio ?? ''}"`,
       valorCompra.toFixed(2),
@@ -901,6 +908,104 @@ handleRelatorioExportado(response: any): void {
   link.download = 'relatorio_materiais.pdf';
   link.click();
 }
+
+
+
+
+exportarQrCodesSelecionados(): void {
+  const doc = new jsPDF();
+  const qrWidth = 50;  // Tamanho reduzido do QR Code
+  const qrHeight = 50;
+  const margin = 10;   // Margem entre os QR Codes
+  const colCount = 3;  // Número de colunas
+  const rowCount = 5;  // Número de linhas
+  let xPos = margin;
+  let yPos = margin;
+  let qrCount = 0;
+
+  this.selectedMateriais.forEach((material, index) => {
+    if (qrCount >= rowCount * colCount) return;  // Limitando a quantidade de QR Codes gerados (15 no total)
+
+    // Gerar o QR Code
+    const qrCodeContainer = document.getElementById(`qr-${material.id}`);
+    const canvas = qrCodeContainer?.querySelector('canvas') as HTMLCanvasElement;
+    if (canvas) {
+      const imageUrl = canvas.toDataURL("image/png");
+      doc.addImage(imageUrl, 'PNG', xPos, yPos, qrWidth, qrHeight);  // Adiciona o QR Code no PDF
+
+      qrCount++;
+      xPos += qrWidth + margin;  // Move para a próxima coluna
+
+      // Se 3 QR Codes foram adicionados na linha, vai para a próxima linha
+      if (qrCount % colCount === 0) {
+        xPos = margin;
+        yPos += qrHeight + margin;  // Move para a próxima linha
+      }
+    }
+  });
+
+  doc.save('qr-codes-selecionados.pdf');
+}
+
+
+
+
+exportarQrCodesTodos(): void {
+  const doc = new jsPDF();
+  const qrWidth = 50;  // Tamanho reduzido do QR Code
+  const qrHeight = 50;
+  const margin = 10;   // Margem entre os QR Codes
+  const colCount = 3;  // Número de colunas
+  const rowCount = 5;  // Número de linhas
+  let xPos = margin;
+  let yPos = margin;
+  let qrCount = 0;
+
+  this.materiais.forEach((material, index) => {
+    if (qrCount >= rowCount * colCount) return;  // Limitando a quantidade de QR Codes gerados (15 no total)
+
+    // Gerar o QR Code
+    const qrCodeContainer = document.getElementById(`qr-${material.id}`);
+    const canvas = qrCodeContainer?.querySelector('canvas') as HTMLCanvasElement;
+    if (canvas) {
+      const imageUrl = canvas.toDataURL("image/png");
+      doc.addImage(imageUrl, 'PNG', xPos, yPos, qrWidth, qrHeight);  // Adiciona o QR Code no PDF
+
+      qrCount++;
+      xPos += qrWidth + margin;  // Move para a próxima coluna
+
+      // Se 3 QR Codes foram adicionados na linha, vai para a próxima linha
+      if (qrCount % colCount === 0) {
+        xPos = margin;
+        yPos += qrHeight + margin;  // Move para a próxima linha
+      }
+    }
+  });
+
+  doc.save('qr-codes-todos.pdf');
+}
+
+
+
+
+
+onRightClick(event: MouseEvent, material: MaterialResponseDTO): void {
+  event.preventDefault();
+  this.selectedMateriais.push(material);  // Adiciona o item na seleção
+  this.showContextMenu(event);
+}
+
+showContextMenu(event: MouseEvent): void {
+  const contextMenu = document.getElementById('context-menu');
+  
+  if (contextMenu) {
+    contextMenu.style.display = 'block';
+    contextMenu.style.left = `${event.pageX}px`;
+    contextMenu.style.top = `${event.pageY}px`;
+  }
+}
+
+
 
 
 

@@ -238,3 +238,30 @@ form.p-fluid .p-select {
   justify-content: center;
   align-items: center;
 }
+
+
+
+.context-menu {
+  position: absolute;
+  display: none;
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+  z-index: 9999;
+  width: 200px;
+}
+
+.context-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.context-menu li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.context-menu li:hover {
+  background-color: #f1f1f1;
+}

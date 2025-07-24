@@ -16,6 +16,25 @@
       (onClick)="excluirSelecionados()" 
       [disabled]="!selectedMateriais || !selectedMateriais.length" 
     />
+    
+    <!-- Botão para exportar todos os QR Codes -->
+    <p-button 
+    label="Exportar Todos os QR Codes" 
+    icon="pi pi-download" 
+    severity="primary" 
+    (onClick)="exportarQrCodesTodos()" 
+    class="ml-2"
+    />
+    <!-- Botão para exportar os materiais selecionados - só será exibido se houver seleção -->
+    <p-button 
+      *ngIf="selectedMateriais.length > 0" 
+      label="Exportar QR Codes Selecionados" 
+      icon="pi pi-download" 
+      severity="primary" 
+      (onClick)="exportarQrCodesSelecionados()" 
+      class="ml-2"
+    />
+
   </ng-template>
 
   <ng-template #end>
@@ -226,6 +245,17 @@
         </div>
       </div>
 
+      <div class="campo-duplo">
+      <div class="campo">
+        <label class="label-visualizar">Modelo</label>
+        <input type="text" pInputText [value]="material.modelo" readonly class="w-full" />
+      </div>
+      <div class="campo">
+          <label class="label-visualizar">Número de Série</label>
+          <input type="text" pInputText [value]="material.numSerie" readonly class="w-full" />
+        </div>
+      </div>
+
       <div class="campo">
         <label class="label-visualizar">Localização Física</label>
         <input type="text" pInputText [value]="material.localizacaoFisica" readonly class="w-full" />
@@ -410,6 +440,35 @@
             class="w-full">
           </p-select>
           <small class="text-red-500" *ngIf="submitted && !material.origemId">Origem é obrigatória.</small>
+        </div>
+      </div>
+
+      <div class="campo-duplo">
+        <!-- Modelo -->
+        <div class="campo">
+          <label for="modelo" class="block font-bold mb-2">Modelo</label>
+          <input 
+            type="text" 
+            pInputText 
+            id="modelo" 
+            [(ngModel)]="material.modelo" 
+            required 
+            autofocus 
+            class="w-full" 
+          />
+        </div>
+
+        <!-- Número de Série -->
+        <div class="campo">
+          <label for="numserie" class="block font-bold mb-2">Número de Série</label>
+          <input 
+            type="text" 
+            pInputText 
+            id="numserie" 
+            [(ngModel)]="material.numSerie" 
+            required 
+            class="w-full" 
+          />
         </div>
       </div>
 
@@ -614,5 +673,15 @@
   
   <div id="qr-ampliado" style="margin: auto; width: 600px; height: 600px"></div>
 </p-dialog>
+
+
+<div id="context-menu" class="context-menu" (click)="$event.stopPropagation()">
+  <ul>
+    <li (click)="exportarQrCodesSelecionados()">Exportar QR Codes Selecionados (PNG)</li>
+    <li (click)="exportarQrCodesTodos()">Exportar Todos os QR Codes (PNG)</li>
+  </ul>
+</div>
+
+
 
 <app-material-teste></app-material-teste>
