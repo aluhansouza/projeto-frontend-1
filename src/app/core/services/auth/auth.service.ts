@@ -64,9 +64,6 @@ getRoles(): string[] {
         return this.getRoles().includes('ROLE_ADMINISTRADOR');
     }
 
-    /**
-     * Verifica se o usuário possui pelo menos uma das roles informadas.
-     */
     hasAnyRole(roles: string[]): boolean {
         const userRoles = this.getRoles();
         return roles.some((role) => userRoles.includes(role));

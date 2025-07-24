@@ -22,6 +22,8 @@ export function toMaterialRequestDTO(material: MaterialResponseDTO): MaterialReq
     tipoDepreciacao: material.tipoDepreciacao ?? TipoDepreciacao.LINEAR,
     percentualDepreciacao: material.percentualDepreciacao ?? 0,
     vidaUtilAnos: material.vidaUtilAnos ?? 0,
-    valorAtual: material.valorAtual ?? 0
+    valorAtual: material.valorAtual ?? 0,
+    numSerie: material.numSerie ?? 0,
+    modelo: material.modelo ?? ''
   };
 }

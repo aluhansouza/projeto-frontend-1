@@ -19,14 +19,38 @@
   </ng-template>
 
   <ng-template #end>
-    <p-button 
-      label="Exportar para CSV" 
-      icon="pi pi-upload" 
-      severity="secondary" 
-      (onClick)="exportCSV()" 
-    />
-  </ng-template>
+  <!-- Botão para exportar os materiais selecionados - só será exibido se houver seleção -->
+  <p-button 
+    *ngIf="selectedMateriais.length > 0" 
+    label="Exportar Selecionados" 
+    icon="pi pi-download" 
+    severity="primary" 
+    (onClick)="exportarRelatorioSelecionados()" 
+    class="ml-2"
+  />
+  
+  <!-- Botão para exportar todos os materiais -->
+  <p-button 
+    label="Exportar Todos" 
+    icon="pi pi-download" 
+    severity="primary" 
+    (onClick)="exportarRelatorio()" 
+    class="ml-2"
+  />
+  
+  <!-- Botão para exportar para CSV - adicionar ml-2 para alinhar com os outros -->
+  <p-button 
+    label="Exportar para CSV" 
+    icon="pi pi-upload" 
+    severity="secondary" 
+    (onClick)="exportCSV()" 
+    class="ml-2"
+  />
+</ng-template>
+
 </p-toolbar>
+
+
 
 <!-- SPINNERS -->
 <app-spinner-gradiente *ngIf="loadingSalvar || loadingExcluir || loadingExcluirMassa"></app-spinner-gradiente>

@@ -20,4 +20,6 @@ export interface MaterialRequestDTO {
     percentualDepreciacao: number;
     vidaUtilAnos: number;
     valorAtual: number;
+    numSerie?:number;
+    modelo? :string;
 }

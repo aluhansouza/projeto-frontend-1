@@ -1,0 +1,75 @@
+::ng-deep .overlay-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1000;
+    transform: translate(-50%, -50%);
+}
+
+/* Muda a cor do spinner para verde */
+.p-button.p-button-loading .p-button-loading-icon {
+    color: green !important; /* Força a cor verde */
+}
+
+/* Altera a cor do ícone de carregamento para verde */
+.p-button.p-button-loading .p-button-loading-icon {
+    color: green !important;
+}
+
+/* Garante que o spinner seja verde, independentemente de qualquer estilo */
+.p-button-loading {
+    border-color: green !important;
+}
+
+/* Altera a cor do ícone de carregamento para verde */
+.p-button.p-button-loading .p-button-loading-icon {
+    color: green !important;
+}
+
+/* Alteração para o spinner do botão */
+.p-button.p-button-loading {
+    background-color: green !important;
+    border-color: green !important;
+}
+
+.p-button.p-button-loading .p-button-loading-icon {
+    color: white !important; /* O ícone do spinner fica branco */
+}
+
+.input-grande {
+    height: 3rem;
+    font-size: 1.1rem;
+    padding: 0.75rem;
+}
+
+form.p-fluid input,
+form.p-fluid .p-dropdown {
+    height: 3rem;
+    font-size: 1.1rem;
+}
+
+.formulario-usuario .p-field {
+    margin-bottom: 1.5rem;
+}
+
+.campo-grande {
+    height: 3rem;
+    font-size: 1.1rem;
+    padding: 0.5rem;
+}
+
+.custom-spinner .p-progress-spinner-circle {
+    border-top-color: green; /* Cor do spinner */
+}
+
+.custom-spinner .p-progress-spinner {
+    border-color: rgba(0, 0, 0, 0.1); /* Cor do fundo */
+}
+
+::ng-deep .custom-spinner .p-progress-spinner-circle {
+    stroke: #22c55e !important;
+}
+
+.p-progress-spinner-circle {
+    stroke: #22c55e !important;
+}

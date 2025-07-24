@@ -73,4 +73,10 @@ export class MaterialService {
     buscarPorId(id: number): Observable<MaterialResponseDTO> {
         return this.http.get<MaterialResponseDTO>(`${this.apiUrl}/${id}`);
     }
+    exportarRelatorio(parametros: any): Observable<Blob> {
+  return this.http.post<Blob>(`${this.apiUrl}/exportar-relatorio`, parametros, {
+    responseType: 'blob' as 'json'
+  });
+}
+
 }

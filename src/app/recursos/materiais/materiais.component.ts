@@ -853,9 +853,54 @@ regenerarQrCodes(): void {
   }, 0);
 }
 
+exportarRelatorio(): void {
+  const parametros = {
+    tipoRelatorio: 'todos', 
+  };
+
+  this.materialService.exportarRelatorio(parametros).subscribe({
+    next: (response) => {
+      this.handleRelatorioExportado(response);
+    },
+    error: (err) => {
+      console.error('Erro ao exportar relatório de todos os materiais', err);
+    }
+  });
+}
+
+exportarRelatorioSelecionados(): void {
+  if (this.selectedMateriais.length === 0) {
+    this.messageService.add({
+      severity: 'warn',
+      summary: 'Aviso',
+      detail: 'Nenhum material selecionado.'
+    });
+    return;
+  }
+
+  const parametros = {
+    tipoRelatorio: 'selecionados', 
+    materiaisIds: this.selectedMateriais.map(m => m.id) 
+  };
+
+  this.materialService.exportarRelatorio(parametros).subscribe({
+    next: (response) => {
+      this.handleRelatorioExportado(response);
+    },
+    error: (err) => {
+      console.error('Erro ao exportar relatório dos materiais selecionados', err);
+    }
+  });
+}
 
 
-
+handleRelatorioExportado(response: any): void {
+  const blob = new Blob([response], { type: 'application/pdf' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'relatorio_materiais.pdf';
+  link.click();
+}
 
 
 
